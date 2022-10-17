@@ -5,6 +5,7 @@ import com.ll.ebooks.domain.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,9 +30,10 @@ public class MemberController {
 
     @PreAuthorize("isAnonymous()")
     @PostMapping("/join")
-    public String Join(@Valid JoinRequestDto joinRequestDto, BindingResult bindingResult) {
+    public String Join(@Valid JoinRequestDto joinRequestDto, BindingResult bindingResult, Model model) {
 
         if(bindingResult.hasErrors()) {
+            model.addAttribute("joinRequestDto", joinRequestDto);
             return "member/JoinForm";
         }
 

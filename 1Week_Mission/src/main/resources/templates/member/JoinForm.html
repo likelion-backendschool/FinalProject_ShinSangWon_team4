@@ -63,7 +63,7 @@
                         <span class="label-text">아이디</span>
                     </label>
                     <input autofocus type="text" name="username" placeholder="아이디" class="input input-bordered"
-                           maxlength="16">
+                           maxlength="16" th:field="*{username}">
                 </div>
 
                 <div class="form-control">
@@ -86,14 +86,14 @@
                     <label class="label">
                         <span class="label-text">이메일</span>
                     </label>
-                    <input type="email" name="email" placeholder="이메일" class="input input-bordered" maxlength="50">
+                    <input type="email" name="email" placeholder="이메일" class="input input-bordered" maxlength="50" th:field="*{email}">
                 </div>
 
                 <div class="form-control">
                     <label class="label">
                         <span class="label-text">닉네임(선택)</span>
                     </label>
-                    <input type="text" name="nickname" placeholder="작가로 활동하시려면 기입해주세요" class="input input-bordered" maxlength="8">
+                    <input type="text" name="nickname" placeholder="작가로 활동하시려면 기입해주세요" class="input input-bordered" maxlength="8" th:field="*{nickname}">
                 </div>
 
                 <div class="grid grid-cols-2 mt-2 gap-2">
