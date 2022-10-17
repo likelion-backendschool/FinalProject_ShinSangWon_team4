@@ -2,62 +2,21 @@
 <html layout:decorate="~{layout/layout.html}">
 
 <head>
+    <style>
+        .fieldError { color:red; font-size:12px;}
+    </style>
     <title>회원가입</title>
 </head>
 
 <body>
+
 <main layout:fragment="main">
     <section class="section section-join flex-grow flex flex-col items-center justify-center">
 
         <div class="max-w-md w-full px-2 pt-4">
             <h1 class="font-bold text-lg">회원가입</h1>
-
-            <script>
-                let MemberJoin__submitDone = false;
-
-                function MemberJoin__submit(form) {
-                    if (MemberJoin__submitDone) {
-                        return;
-                    }
-
-                    form.username.value = form.username.value.trim();
-
-                    if (form.username.value.length == 0) {
-                        warningModal("로그인아이디를 입력해주세요.");
-                        form.username.focus();
-
-                        return;
-                    }
-
-                    form.password.value = form.password.value.trim();
-
-                    if (form.password.value.length == 0) {
-                        warningModal("로그인비밀번호를 입력해주세요.");
-                        form.password.focus();
-
-                        return;
-                    }
-
-                    form.email.value = form.email.value.trim();
-
-                    if (form.email.value.length == 0) {
-                        warningModal("이메일을 입력해주세요.");
-                        form.email.focus();
-
-                        return;
-                    }
-
-                    form.submit();
-                    MemberJoin__submitDone = true;
-                }
-            </script>
-
-
             <form th:action method="POST" class="flex flex-col gap-3"
                   th:object="${joinRequestDto}">
-                <div class="alert alert-danger" role="alert" th:if="${#fields.hasAnyErrors()}">
-                    <div th:each="err : ${#fields.allErrors()}" th:text="${err}" />
-                </div>
                 <div class="form-control">
                     <label class="label">
                         <span class="label-text">아이디</span>
@@ -65,6 +24,7 @@
                     <input autofocus type="text" name="username" placeholder="아이디" class="input input-bordered"
                            maxlength="16" th:field="*{username}">
                 </div>
+                <p th:if="${#fields.hasErrors('username')}" th:errors="*{username}" class="fieldError"></p>
 
                 <div class="form-control">
                     <label class="label">
@@ -73,6 +33,7 @@
                     <input type="password" name="password"
                            placeholder="비밀번호" class="input input-bordered" maxlength="16">
                 </div>
+                <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="fieldError"></p>
 
                 <div class="form-control">
                     <label class="label">
@@ -88,6 +49,7 @@
                     </label>
                     <input type="email" name="email" placeholder="이메일" class="input input-bordered" maxlength="50" th:field="*{email}">
                 </div>
+                <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="fieldError"></p>
 
                 <div class="form-control">
                     <label class="label">
