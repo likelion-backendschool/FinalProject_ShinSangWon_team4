@@ -54,13 +54,16 @@
 
 
             <form th:action method="POST" class="flex flex-col gap-3"
-                  onsubmit="MemberJoin__submit(this); return false;">
+                  th:object="${joinRequestDto}">
+                <div class="alert alert-danger" role="alert" th:if="${#fields.hasAnyErrors()}">
+                    <div th:each="err : ${#fields.allErrors()}" th:text="${err}" />
+                </div>
                 <div class="form-control">
                     <label class="label">
                         <span class="label-text">아이디</span>
                     </label>
                     <input autofocus type="text" name="username" placeholder="아이디" class="input input-bordered"
-                           maxlength="50">
+                           maxlength="16">
                 </div>
 
                 <div class="form-control">
@@ -68,7 +71,15 @@
                         <span class="label-text">비밀번호</span>
                     </label>
                     <input type="password" name="password"
-                           placeholder="비밀번호" class="input input-bordered" maxlength="50">
+                           placeholder="비밀번호" class="input input-bordered" maxlength="16">
+                </div>
+
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text">비밀번호 확인</span>
+                    </label>
+                    <input type="password" name="passwordCheck"
+                           placeholder="비밀번호 확인" class="input input-bordered" maxlength="16">
                 </div>
 
                 <div class="form-control">
@@ -76,6 +87,13 @@
                         <span class="label-text">이메일</span>
                     </label>
                     <input type="email" name="email" placeholder="이메일" class="input input-bordered" maxlength="50">
+                </div>
+
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text">닉네임(선택)</span>
+                    </label>
+                    <input type="text" name="nickname" placeholder="작가로 활동하시려면 기입해주세요" class="input input-bordered" maxlength="8">
                 </div>
 
                 <div class="grid grid-cols-2 mt-2 gap-2">

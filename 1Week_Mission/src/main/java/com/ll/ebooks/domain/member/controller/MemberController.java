@@ -23,6 +23,7 @@ public class MemberController {
     @GetMapping("/join")
     public String JoinForm(JoinRequestDto joinRequestDto) {
 
+
         return "member/JoinForm";
     }
 
