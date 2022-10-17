@@ -57,6 +57,7 @@
                     </label>
                     <input type="text" name="nickname" placeholder="작가로 활동하시려면 기입해주세요" class="input input-bordered" maxlength="8" th:field="*{nickname}">
                 </div>
+                <p th:if="${#fields.hasErrors('nickname')}" th:errors="*{nickname}" class="fieldError"></p>
 
                 <div class="grid grid-cols-2 mt-2 gap-2">
                     <input class="btn btn-primary" type="submit" value="회원가입">

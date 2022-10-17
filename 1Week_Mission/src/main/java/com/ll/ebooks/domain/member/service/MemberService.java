@@ -27,9 +27,8 @@ public class MemberService {
     public Long join(JoinRequestDto joinRequestDto) {
         /*비밀번호 암호화*/
         joinRequestDto.encodingPassword(passwordEncoder.encode(joinRequestDto.getPassword()));
-
         /*가입 시 nickname이 존재하지 않으면, Member 존재 하면 WRITER 역할 부여*/
-        if(joinRequestDto.getNickname() == null) {
+        if(joinRequestDto.getNickname().equals("")) {
             return memberRepository.save(joinRequestDto.toEntity(Role.MEMBER)).getId();
         }
 

@@ -29,7 +29,7 @@ public class JoinRequestDto {
     @NotBlank(message = "비밀번호 확인을 위해 같은 비밀번호를 입력해 주세요.")
     private String passwordCheck;
 
-    @Pattern(regexp = "^[ㄱ-ㅎ가-힣a-z0-9-_]{2,8}$", message = "닉네임은 특수문자를 제외한 2~8자리여야 합니다.")
+    @Pattern(regexp = "[0-9a-zA-Z가-힣]{0,8}", message = "닉네임은 특수문자를 제외한 8자 이내여야 합니다.")
     private String nickname;
 
     @NotBlank(message = "이메일은 필수 입력 사항입니다.")
