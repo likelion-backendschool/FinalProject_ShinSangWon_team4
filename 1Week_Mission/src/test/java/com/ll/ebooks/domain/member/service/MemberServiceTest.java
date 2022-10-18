@@ -3,9 +3,11 @@ package com.ll.ebooks.domain.member.service;
 import com.ll.ebooks.domain.member.dto.request.JoinRequestDto;
 import com.ll.ebooks.domain.member.dto.request.MemberInfoModifyRequestDto;
 import com.ll.ebooks.domain.member.dto.request.MemberPasswordModifyRequestDto;
+import com.ll.ebooks.domain.member.dto.request.UsernameFindRequestDto;
 import com.ll.ebooks.domain.member.entity.Member;
 import com.ll.ebooks.domain.member.entity.Role;
 import com.ll.ebooks.domain.member.repository.MemberRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,16 +31,21 @@ class MemberServiceTest {
         this.memberRepository = memberRepository;
     }
 
-    @Test
-    @DisplayName("회원_가입된다")
-    void test1() {
-        //given
+    @BeforeEach
+    void tearUp() {
         memberService.join(JoinRequestDto.builder()
                 .username("dnjsml30")
                 .password("test123!")
                 .email("dnjsml30@naver.com")
                 .nickname("상원")
                 .build());
+    }
+
+    @Test
+    @DisplayName("회원_가입된다")
+    void test1() {
+        //given
+
 
         //when
         List<Member> memberList = memberRepository.findAll();
@@ -55,16 +62,17 @@ class MemberServiceTest {
     void test2() {
 
         memberService.join(JoinRequestDto.builder()
-                .username("dnjsml30")
+                .username("test123")
                 .password("test123!")
-                .email("dnjsml30@naver.com")
+                .email("test123@naver.com")
+                .nickname("")
                 .build());
 
         //when
         List<Member> memberList = memberRepository.findAll();
 
         //then
-        Member member = memberList.get(0);
+        Member member = memberList.get(1);
 
         assertThat(member.getRole()).isEqualTo(Role.MEMBER);
     }
@@ -73,12 +81,6 @@ class MemberServiceTest {
     @DisplayName("비밀번호_암호화_수행된다")
     void test3() {
         //given
-        memberService.join(JoinRequestDto.builder()
-                .username("dnjsml30")
-                .password("test123!")
-                .email("dnjsml30@naver.com")
-                .nickname("상원")
-                .build());
 
         //when
         List<Member> memberList = memberRepository.findAll();
@@ -94,12 +96,6 @@ class MemberServiceTest {
     @DisplayName("회원정보_변경된다")
     void test4() {
         //given
-        memberService.join(JoinRequestDto.builder()
-                .username("dnjsml30")
-                .password("test123!")
-                .email("dnjsml30@naver.com")
-                .nickname("상원")
-                .build());
 
         List<Member> memberList = memberRepository.findAll();
         Member member = memberList.get(0);
@@ -113,15 +109,9 @@ class MemberServiceTest {
     }
 
     @Test
-    @DisplayName("회원_비밀번호_변경된다")
+    @DisplayName("회원비밀번호_변경된다")
     void test5() {
         //given
-        memberService.join(JoinRequestDto.builder()
-                .username("dnjsml30")
-                .password("test123!")
-                .email("dnjsml30@naver.com")
-                .nickname("상원")
-                .build());
 
         List<Member> memberList = memberRepository.findAll();
         Member member = memberList.get(0);
@@ -129,6 +119,25 @@ class MemberServiceTest {
         memberService.modifyPassword(new MemberPasswordModifyRequestDto("test123!", "sangwon123", "sangwon123"), member);
         //then
         assertThat(memberService.passwordConfirm("sangwon123", member)).isTrue();
+    }
+
+    @Test
+    @DisplayName("임시비밀번호_생성된다")
+    void test6() {
+        System.out.println(memberService.getTempPassword());
+    }
+
+    @Test
+    @DisplayName("이메일로_아이디_찾아진다")
+    void test7() {
+        //given
+
+        //when
+        Long id = memberService.findUsername(new UsernameFindRequestDto("dnjsml30@naver.com"));
+        //then
+        assertThat(memberRepository.findById(id).orElseThrow().getUsername()).isEqualTo("dnjsml30");
+
+
     }
 
 }

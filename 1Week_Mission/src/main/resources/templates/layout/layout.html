@@ -73,12 +73,31 @@
                     로그아웃
                 </span>
             </a>
-            <form name="logoutForm" th:action="@{/member/logout}" method="post" hidden></form>
-            <a href="/member/profile" class="inline-flex" sec:authorize="isAuthenticated()">
-                <i class="fa-solid fa-user"></i>
+            <a href="/member/findUsername" class="inline-flex" sec:authorize="isAnonymous()">
+                <i class="fa-solid fa fa-search"></i>
                 <span class="ml-[2px] hidden sm:block">
-                    프로파일
+                    아이디 찾기
                 </span>
+            </a>
+            <a href="/member/findPassword" class="inline-flex" sec:authorize="isAnonymous()">
+                <i class="fa-solid fa fa-search"></i>
+                <span class="ml-[2px] hidden sm:block">
+                    비밀번호 찾기
+                </span>
+            </a>
+            <a href="/member/modify" class="inline-flex" sec:authorize="isAuthenticated()">
+                <i class="fa-solid fa fa-pencil"></i>
+                <span class="ml-[2px] hidden sm:block">
+                    회원정보 수정
+                </span>
+            </a>
+            <a href="/member/modifyPassword" class="inline-flex" sec:authorize="isAuthenticated()">
+                <i class="fa-solid fa fa-pencil"></i>
+                <span class="ml-[2px] hidden sm:block">
+                    비밀번호 수정
+                </span>
+            </a>
+
             </a>
         </div>
     </div>
