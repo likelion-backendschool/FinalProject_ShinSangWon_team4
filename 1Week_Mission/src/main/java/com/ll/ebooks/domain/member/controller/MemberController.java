@@ -46,4 +46,11 @@ public class MemberController {
 
         return "redirect:/";
     }
+
+    @PreAuthorize("isAnonymous()")
+    @GetMapping("/login")
+    public String loginForm() {
+
+        return "member/login";
+    }
 }
