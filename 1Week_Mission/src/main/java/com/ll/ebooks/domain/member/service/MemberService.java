@@ -3,6 +3,7 @@ package com.ll.ebooks.domain.member.service;
 import com.ll.ebooks.domain.member.dto.request.JoinRequestDto;
 import com.ll.ebooks.domain.member.dto.request.MemberInfoModifyRequestDto;
 import com.ll.ebooks.domain.member.dto.request.MemberPasswordModifyRequestDto;
+import com.ll.ebooks.domain.member.dto.request.UsernameFindRequestDto;
 import com.ll.ebooks.domain.member.entity.Member;
 import com.ll.ebooks.domain.member.entity.Role;
 import com.ll.ebooks.domain.member.repository.MemberRepository;
@@ -80,4 +81,17 @@ public class MemberService {
     }
 
 
+    public Long findUsername(UsernameFindRequestDto usernameFindRequestDto) {
+        Member member = memberRepository.findByEmail(usernameFindRequestDto.getEmail())
+                .orElseThrow(() -> new IllegalArgumentException("회원이 존재하지 않습니다."));
+
+        /* 메일 전송 */
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(usernameFindRequestDto.getEmail());
+        message.setSubject("요청하신 아이디를 알려드립니다.");
+        message.setText("아이디는 %s 입니다.".formatted(member.getUsername()));
+        javaMailSender.send(message);
+
+        return member.getId();
+    }
 }

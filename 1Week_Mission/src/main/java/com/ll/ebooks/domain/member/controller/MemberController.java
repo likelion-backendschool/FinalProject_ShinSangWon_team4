@@ -4,6 +4,7 @@ import com.ll.ebooks.domain.member.dto.request.JoinRequestDto;
 import com.ll.ebooks.domain.member.dto.request.LoginRequestDto;
 import com.ll.ebooks.domain.member.dto.request.MemberInfoModifyRequestDto;
 import com.ll.ebooks.domain.member.dto.request.MemberPasswordModifyRequestDto;
+import com.ll.ebooks.domain.member.dto.request.UsernameFindRequestDto;
 import com.ll.ebooks.domain.member.entity.Member;
 import com.ll.ebooks.domain.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -147,5 +148,27 @@ public class MemberController {
         memberService.modifyPassword(memberPasswordModifyRequestDto, member);
 
         return "redirect:/";
+    }
+
+    @PreAuthorize("isAnonymous()")
+    @GetMapping("/findUsername")
+    public String findUsername(UsernameFindRequestDto usernameFindRequestDto) {
+
+
+        return "member/findUsername";
+    }
+
+    @PreAuthorize("isAnonymous()")
+    @PostMapping("/findUsername")
+    public String findUsername(@Valid UsernameFindRequestDto usernameFindRequestDto, BindingResult bindingResult) {
+
+        if(bindingResult.hasErrors()) {
+            return "member/findUsername";
+        }
+
+        memberService.findUsername(usernameFindRequestDto);
+
+        return "redirect:/";
+
     }
 }
