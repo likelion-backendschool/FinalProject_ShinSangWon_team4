@@ -1,6 +1,7 @@
 package com.ll.ebooks.domain.member.controller;
 
 import com.ll.ebooks.domain.member.dto.request.JoinRequestDto;
+import com.ll.ebooks.domain.member.dto.request.LoginRequestDto;
 import com.ll.ebooks.domain.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -49,8 +50,13 @@ public class MemberController {
 
     @PreAuthorize("isAnonymous()")
     @GetMapping("/login")
-    public String loginForm() {
+    public String loginForm(LoginRequestDto loginRequestDto) {
 
         return "member/login";
+    }
+
+    @GetMapping("/logout")
+    public String logout() {
+        return "redirect:member/login";
     }
 }

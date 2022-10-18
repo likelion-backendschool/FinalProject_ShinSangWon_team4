@@ -44,12 +44,13 @@
             </script>
 
 
-            <form th:action method="POST" class="flex flex-col gap-3" onsubmit="MemberLogin__submit(this); return false;">
+            <form th:action method="POST" th:object="${loginRequestDto}"
+                  class="flex flex-col gap-3" onsubmit="MemberLogin__submit(this); return false;">
                 <div class="form-control">
                     <label class="label">
                         <span class="label-text">아이디</span>
                     </label>
-                    <input autofocus type="text" name="username" placeholder="아이디" class="input input-bordered" maxlength="50">
+                    <input autofocus type="text" name="username" th:field="*{username}" placeholder="아이디" class="input input-bordered" maxlength="16">
                 </div>
 
                 <div class="form-control">
@@ -57,7 +58,7 @@
                         <span class="label-text">비밀번호</span>
                     </label>
                     <input type="password" name="password"
-                           placeholder="비밀번호" class="input input-bordered" maxlength="50">
+                           placeholder="비밀번호" class="input input-bordered" maxlength="16">
                 </div>
 
                 <div class="grid grid-cols-2 mt-2 gap-2">

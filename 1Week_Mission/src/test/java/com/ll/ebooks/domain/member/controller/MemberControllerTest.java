@@ -1,5 +1,6 @@
 package com.ll.ebooks.domain.member.controller;
 
+import com.ll.ebooks.domain.member.dto.request.JoinRequestDto;
 import com.ll.ebooks.domain.member.service.MemberService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -9,12 +10,16 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.context.WebApplicationContext;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated;
+import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.unauthenticated;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.handler;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -27,6 +32,9 @@ public class MemberControllerTest {
 
     @Autowired
     private MemberService memberService;
+
+    @Autowired
+    private WebApplicationContext webApplicationContext;
 
     @Test
     @DisplayName("회원가입페이지_나타난다")
@@ -63,5 +71,44 @@ public class MemberControllerTest {
                 .andExpect(handler().methodName("Join"));
 
 
+    }
+
+    @Test
+    @DisplayName("로그인_성공한다")
+    void test3() throws Exception {
+
+        //given
+        memberService.join(JoinRequestDto.builder()
+                .username("dnjsml30")
+                .password("test123!")
+                .email("dnjsml30@naver.com")
+                .nickname("상원")
+                .build());
+
+        //when
+        mockMvc.perform(post("/member/login")
+                .param("username", "dnjsml30")
+                .param("password", "test123!")
+                .with(csrf()))
+                //then
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/"))
+                .andExpect(authenticated());
+
+    }
+
+    @Test
+    @DisplayName("로그인_실패한다")
+    void test4() throws Exception {
+
+        //when
+        mockMvc.perform(post("/member/login")
+                        .param("username", "test1234")
+                        .param("password", "test123!")
+                        .with(csrf()))
+                //then
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/member/login?error"))
+                .andExpect(unauthenticated());
     }
 }
