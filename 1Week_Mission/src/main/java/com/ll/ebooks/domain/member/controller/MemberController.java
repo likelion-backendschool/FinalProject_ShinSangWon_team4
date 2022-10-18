@@ -42,7 +42,6 @@ public class MemberController {
             return "member/JoinForm";
         }
 
-        System.out.println(joinRequestDto.getNickname());
         memberService.join(joinRequestDto);
 
         return "redirect:/";
