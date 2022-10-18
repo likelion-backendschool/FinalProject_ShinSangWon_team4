@@ -57,7 +57,7 @@ public class PostController {
 
     }
 
-    @GetMapping("/post/{id}/modify")
+    @GetMapping("/{id}/modify")
     public String modifyForm(Model model, @PathVariable Long id, PostModifyRequestDto postModifyRequestDto, Principal principal) {
 
         if(!postService.isAuthorized(id, principal)) {
@@ -68,7 +68,7 @@ public class PostController {
         return "post/modify";
     }
 
-    @PostMapping("/post/{id}/modify")
+    @PostMapping("/{id}/modify")
     public String modify(@PathVariable Long id, @Valid PostModifyRequestDto postModifyRequestDto, BindingResult bindingResult, Principal principal) {
 
         if(bindingResult.hasErrors()) {
@@ -81,6 +81,18 @@ public class PostController {
 
         postService.modify(postModifyRequestDto, id);
 
-        return "redirect:post/%d/modify".formatted(id);
+        return "redirect:post/%d/modify.formatted(id)";
+    }
+
+    @GetMapping("{id}/delete")
+    public String delete(@PathVariable Long id, Principal principal) {
+
+        if(!postService.isAuthorized(id, principal)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "삭제권한이 없습니다.");
+        }
+
+        postService.delete(id);
+
+        return "redirect:/post/list";
     }
 }
