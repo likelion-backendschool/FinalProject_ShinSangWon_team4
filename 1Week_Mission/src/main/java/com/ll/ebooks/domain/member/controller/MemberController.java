@@ -3,6 +3,7 @@ package com.ll.ebooks.domain.member.controller;
 import com.ll.ebooks.domain.member.dto.request.JoinRequestDto;
 import com.ll.ebooks.domain.member.dto.request.LoginRequestDto;
 import com.ll.ebooks.domain.member.dto.request.MemberInfoModifyRequestDto;
+import com.ll.ebooks.domain.member.dto.request.MemberPasswordModifyRequestDto;
 import com.ll.ebooks.domain.member.entity.Member;
 import com.ll.ebooks.domain.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -99,11 +100,51 @@ public class MemberController {
         Member member = optionalMember.get();
 
         //비밀번호 검증
-        if(!memberService.passwordConfirm(memberInfoModifyRequestDto, member)) {
+        if(!memberService.passwordConfirm(memberInfoModifyRequestDto.getPasswordCheck(), member)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "비밀번호가 일치하지 않습니다.");
         }
 
         memberService.modify(memberInfoModifyRequestDto, member);
+
+        return "redirect:/";
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/modifyPassword")
+    public String modifyMemberPassword(MemberPasswordModifyRequestDto memberPasswordModifyRequestDto, Principal principal) {
+
+        Optional<Member> optionalMember = memberService.findByUsername(principal.getName());
+
+        if(optionalMember.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "로그인 후 이용해주세요");
+        }
+
+        return "member/modifyPassword";
+
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping("/modifyPassword")
+    public String modifyMemberPassword(@Valid MemberPasswordModifyRequestDto memberPasswordModifyRequestDto, BindingResult bindingResult, Principal principal) {
+        //1차 유효성검사
+        if(bindingResult.hasErrors()) {
+            return "member/modifyPassword";
+        }
+
+        Optional<Member> optionalMember = memberService.findByUsername(principal.getName());
+        //2차 유효성검사
+        if(optionalMember.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "로그인 후 이용해주세요");
+        }
+
+        Member member = optionalMember.get();
+
+        //비밀번호 검증
+        if(!memberService.passwordConfirm(memberPasswordModifyRequestDto.getOldPassword(), member)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "비밀번호가 일치하지 않습니다.");
+        }
+
+        memberService.modifyPassword(memberPasswordModifyRequestDto, member);
 
         return "redirect:/";
     }
