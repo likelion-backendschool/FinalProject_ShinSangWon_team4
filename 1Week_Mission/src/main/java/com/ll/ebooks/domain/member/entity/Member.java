@@ -1,14 +1,18 @@
 package com.ll.ebooks.domain.member.entity;
 
 import com.ll.ebooks.domain.global.entity.BaseEntity;
+import com.ll.ebooks.domain.post.entity.Post;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.OneToMany;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor
@@ -29,6 +33,9 @@ public class Member extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    private List<Post> posts;
 
     @Builder
     public Member(String username, String password, String nickname, String email, Role role) {
