@@ -5,6 +5,8 @@ import com.ll.ebooks.domain.member.entity.Member;
 import com.ll.ebooks.domain.member.entity.Role;
 import com.ll.ebooks.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,6 +20,7 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JavaMailSender javaMailSender;
 
     public Optional<Member> findByUsername(String username) {
         return memberRepository.findByUsername(username);
@@ -25,14 +28,23 @@ public class MemberService {
 
     @Transactional
     public Long join(JoinRequestDto joinRequestDto) {
-        /*비밀번호 암호화*/
+        /* 비밀번호 암호화 */
         joinRequestDto.encodingPassword(passwordEncoder.encode(joinRequestDto.getPassword()));
-        /*가입 시 nickname이 존재하지 않으면, Member 존재 하면 WRITER 역할 부여*/
+        /* 가입 시 nickname이 존재하지 않으면, Member 존재 하면 WRITER 역할 부여 */
         if(joinRequestDto.getNickname().equals("")) {
             return memberRepository.save(joinRequestDto.toEntity(Role.MEMBER)).getId();
         }
 
-        return memberRepository.save(joinRequestDto.toEntity(Role.WRITER)).getId();
+        Long memberId = memberRepository.save(joinRequestDto.toEntity(Role.WRITER)).getId();
+
+        /* 메일 전송 */
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(joinRequestDto.getEmail());
+        message.setSubject("멋북스 회원가입을 축하합니다.");
+        message.setText("재밋게 즐겨주세요.");
+        javaMailSender.send(message);
+
+        return memberId;
 
     }
 
