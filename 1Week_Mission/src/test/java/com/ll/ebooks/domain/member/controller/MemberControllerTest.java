@@ -13,6 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated;
+import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.unauthenticated;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -88,8 +90,25 @@ public class MemberControllerTest {
                 .param("username", "dnjsml30")
                 .param("password", "test123!")
                 .with(csrf()))
+                //then
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/"));
+                .andExpect(redirectedUrl("/"))
+                .andExpect(authenticated());
 
+    }
+
+    @Test
+    @DisplayName("로그인_실패한다")
+    void test4() throws Exception {
+
+        //when
+        mockMvc.perform(post("/member/login")
+                        .param("username", "test1234")
+                        .param("password", "test123!")
+                        .with(csrf()))
+                //then
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/member/login?error"))
+                .andExpect(unauthenticated());
     }
 }
