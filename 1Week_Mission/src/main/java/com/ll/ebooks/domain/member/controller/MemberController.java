@@ -68,7 +68,7 @@ public class MemberController {
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/modify")
-    public String modifyMemberInformation(MemberInfoModifyRequestDto modifyRequestDto, Model model, Principal principal) {
+    public String modifyMemberInformation(MemberInfoModifyRequestDto memberInfoModifyRequestDto, Model model, Principal principal) {
 
         Optional<Member> optionalMember = memberService.findByUsername(principal.getName());
 
@@ -79,6 +79,32 @@ public class MemberController {
         model.addAttribute("member", optionalMember.get());
 
         return "member/modify";
+    }
 
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping("/modify")
+    public String modifyMemberInformation(@Valid MemberInfoModifyRequestDto memberInfoModifyRequestDto, Model model, BindingResult bindingResult, Principal principal) {
+        //1차 유효성검사
+        if(bindingResult.hasErrors()) {
+            model.addAttribute("memberInfoModifyRequestDto", memberInfoModifyRequestDto);
+            return "member/modify";
+        }
+
+        Optional<Member> optionalMember = memberService.findByUsername(principal.getName());
+        //2차 유효성검사
+        if(optionalMember.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "로그인 후 이용해주세요");
+        }
+
+        Member member = optionalMember.get();
+
+        //비밀번호 검증
+        if(!memberService.passwordConfirm(memberInfoModifyRequestDto, member)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "비밀번호가 일치하지 않습니다.");
+        }
+
+        memberService.modify(memberInfoModifyRequestDto, member);
+
+        return "redirect:/";
     }
 }
