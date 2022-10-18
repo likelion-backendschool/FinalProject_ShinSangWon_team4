@@ -1,6 +1,8 @@
 package com.ll.ebooks.domain.member.service;
 
 import com.ll.ebooks.domain.member.dto.request.JoinRequestDto;
+import com.ll.ebooks.domain.member.dto.request.MemberInfoModifyRequestDto;
+import com.ll.ebooks.domain.member.dto.request.MemberPasswordModifyRequestDto;
 import com.ll.ebooks.domain.member.entity.Member;
 import com.ll.ebooks.domain.member.entity.Role;
 import com.ll.ebooks.domain.member.repository.MemberRepository;
@@ -47,5 +49,35 @@ public class MemberService {
         return memberId;
 
     }
+
+    @Transactional
+    public Long modify(MemberInfoModifyRequestDto memberInfoModifyRequestDto, Member member) {
+        if(memberInfoModifyRequestDto.getNickname().equals("")) {
+            member.modify(memberInfoModifyRequestDto.getEmail(), memberInfoModifyRequestDto.getNickname(), Role.MEMBER);
+            return member.getId();
+        }
+
+        member.modify(memberInfoModifyRequestDto.getEmail(), memberInfoModifyRequestDto.getNickname(), Role.WRITER);
+        return member.getId();
+    }
+
+    @Transactional
+    public Long modifyPassword(MemberPasswordModifyRequestDto memberPasswordModifyRequestDto, Member member) {
+
+        memberPasswordModifyRequestDto.encodingPassword(passwordEncoder.encode(memberPasswordModifyRequestDto.getPassword()));
+        member.modifyPassword(memberPasswordModifyRequestDto.getPassword());
+
+        return member.getId();
+    }
+    @Transactional
+    public boolean passwordConfirm(String password, Member member) {
+        //비밀번호가 같으면 true 리턴
+        if(passwordEncoder.matches(password, member.getPassword())) {
+            return true;
+        }
+
+        return false;
+    }
+
 
 }

@@ -1,6 +1,8 @@
 package com.ll.ebooks.domain.member.service;
 
 import com.ll.ebooks.domain.member.dto.request.JoinRequestDto;
+import com.ll.ebooks.domain.member.dto.request.MemberInfoModifyRequestDto;
+import com.ll.ebooks.domain.member.dto.request.MemberPasswordModifyRequestDto;
 import com.ll.ebooks.domain.member.entity.Member;
 import com.ll.ebooks.domain.member.entity.Role;
 import com.ll.ebooks.domain.member.repository.MemberRepository;
@@ -86,6 +88,47 @@ class MemberServiceTest {
 
         assertThat(member.getPassword()).isNotEqualTo("test123!");
 
+    }
+
+    @Test
+    @DisplayName("회원정보_변경된다")
+    void test4() {
+        //given
+        memberService.join(JoinRequestDto.builder()
+                .username("dnjsml30")
+                .password("test123!")
+                .email("dnjsml30@naver.com")
+                .nickname("상원")
+                .build());
+
+        List<Member> memberList = memberRepository.findAll();
+        Member member = memberList.get(0);
+        //when
+        memberService.modify(new MemberInfoModifyRequestDto("test123@test.com", "상투", "test123!"), member);
+        //then
+        assertThat(member.getEmail()).isEqualTo("test123@test.com");
+        assertThat(member.getNickname()).isEqualTo("상투");
+
+
+    }
+
+    @Test
+    @DisplayName("회원_비밀번호_변경된다")
+    void test5() {
+        //given
+        memberService.join(JoinRequestDto.builder()
+                .username("dnjsml30")
+                .password("test123!")
+                .email("dnjsml30@naver.com")
+                .nickname("상원")
+                .build());
+
+        List<Member> memberList = memberRepository.findAll();
+        Member member = memberList.get(0);
+        //when
+        memberService.modifyPassword(new MemberPasswordModifyRequestDto("test123!", "sangwon123", "sangwon123"), member);
+        //then
+        assertThat(memberService.passwordConfirm("sangwon123", member)).isTrue();
     }
 
 }
