@@ -1,5 +1,6 @@
 package com.ll.ebooks.domain.member.dto.request;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,6 +12,7 @@ import javax.validation.constraints.Pattern;
 
 @Getter
 @Setter
+@AllArgsConstructor
 @NoArgsConstructor
 public class MemberInfoModifyRequestDto {
 
