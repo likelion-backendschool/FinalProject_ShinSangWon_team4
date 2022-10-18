@@ -15,7 +15,7 @@ import javax.persistence.Enumerated;
 @Entity
 public class Member extends BaseEntity {
 
-    @Column(nullable = false)
+    @Column(unique = true, nullable = false)
     private String username;
 
     @Column(nullable = false)
