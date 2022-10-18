@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @RequiredArgsConstructor
@@ -19,5 +20,13 @@ public class PostController {
 
         model.addAttribute("postList", postService.findAll());
         return "post/list";
+    }
+
+    @GetMapping("/list/{id}")
+    public String showDetail(Model model, @PathVariable Long id) {
+
+        model.addAttribute("post", postService.findById(id));
+
+        return "post/detail";
     }
 }
