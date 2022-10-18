@@ -23,6 +23,7 @@ import javax.validation.Valid;
 import java.security.Principal;
 import java.util.Optional;
 
+// TODO : 에러메세지 성공메세지 띄우기 , 전체적인 코드 리팩토링
 @RequiredArgsConstructor
 @RequestMapping("/member")
 @Controller
