@@ -113,7 +113,7 @@ class MemberServiceTest {
     }
 
     @Test
-    @DisplayName("회원_비밀번호_변경된다")
+    @DisplayName("회원비밀번호_변경된다")
     void test5() {
         //given
         memberService.join(JoinRequestDto.builder()
@@ -129,6 +129,12 @@ class MemberServiceTest {
         memberService.modifyPassword(new MemberPasswordModifyRequestDto("test123!", "sangwon123", "sangwon123"), member);
         //then
         assertThat(memberService.passwordConfirm("sangwon123", member)).isTrue();
+    }
+
+    @Test
+    @DisplayName("임시비밀번호_생성된다")
+    void test6() {
+        System.out.println(memberService.getTempPassword());
     }
 
 }

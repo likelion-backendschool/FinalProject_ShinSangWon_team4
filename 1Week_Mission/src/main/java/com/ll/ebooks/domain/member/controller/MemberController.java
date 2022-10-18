@@ -4,6 +4,7 @@ import com.ll.ebooks.domain.member.dto.request.JoinRequestDto;
 import com.ll.ebooks.domain.member.dto.request.LoginRequestDto;
 import com.ll.ebooks.domain.member.dto.request.MemberInfoModifyRequestDto;
 import com.ll.ebooks.domain.member.dto.request.MemberPasswordModifyRequestDto;
+import com.ll.ebooks.domain.member.dto.request.PasswordFindRequestDto;
 import com.ll.ebooks.domain.member.dto.request.UsernameFindRequestDto;
 import com.ll.ebooks.domain.member.entity.Member;
 import com.ll.ebooks.domain.member.service.MemberService;
@@ -154,7 +155,6 @@ public class MemberController {
     @GetMapping("/findUsername")
     public String findUsername(UsernameFindRequestDto usernameFindRequestDto) {
 
-
         return "member/findUsername";
     }
 
@@ -170,5 +170,26 @@ public class MemberController {
 
         return "redirect:/";
 
+    }
+
+    @PreAuthorize("isAnonymous()")
+    @GetMapping("/findPassword")
+    public String findPassword(PasswordFindRequestDto passwordFindRequestDto) {
+
+        return "member/findPassword";
+    }
+
+    @PreAuthorize("isAnonymous()")
+    @PostMapping("/findPassword")
+    public String findPassword(@Valid PasswordFindRequestDto passwordFindRequestDto, BindingResult bindingResult) {
+
+        if(bindingResult.hasErrors()) {
+            return "member/findPassword";
+        }
+
+        memberService.findPassword(passwordFindRequestDto);
+
+
+        return "redirect:/";
     }
 }
