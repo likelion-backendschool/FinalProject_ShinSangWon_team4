@@ -41,15 +41,8 @@ public class PostService {
         return new PostResponseDto(entity);
     }
     @Transactional
-    public Long write(PostWriteRequestDto postWriteRequestDto, Principal principal) {
+    public Long write(PostWriteRequestDto postWriteRequestDto, Member member) {
 
-        Optional<Member> optionalMember = memberService.findByUsername(principal.getName());
-
-        if(optionalMember.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "로그인 후 이용해주세요");
-        }
-
-        Member member = optionalMember.get();
 
         return postRepository.save(postWriteRequestDto.toEntity(member)).getId();
     }
