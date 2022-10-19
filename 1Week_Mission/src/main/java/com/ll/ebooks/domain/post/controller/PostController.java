@@ -31,7 +31,7 @@ public class PostController {
         return "post/list";
     }
 
-    @GetMapping("/list/{id}")
+    @GetMapping("/{id}")
     public String showDetail(Model model, @PathVariable Long id) {
 
         model.addAttribute("post", postService.findById(id));
@@ -84,7 +84,7 @@ public class PostController {
         return "redirect:post/%d/modify.formatted(id)";
     }
 
-    @GetMapping("{id}/delete")
+    @GetMapping("/{id}/delete")
     public String delete(@PathVariable Long id, Principal principal) {
 
         if(!postService.isAuthorized(id, principal)) {

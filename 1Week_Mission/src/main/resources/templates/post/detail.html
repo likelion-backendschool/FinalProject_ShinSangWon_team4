@@ -2,7 +2,31 @@
 <html layout:decorate="~{layout/layout.html}">
 
 <head>
-    <h1>글 목록</h1>
+    <title>글 상세페이지</title>
 </head>
 
+<body>
+<section layout:fragment="main" class="section container mx-auto px-10">
+
+        <h1>글 상세페이지</h1>
+
+        <div th:text="|작성 : ${post.createdDate}|"></div>
+
+        <div th:text="|수정 : ${post.modifiedDate}|"></div>
+
+        <div th:text="|작성자 : ${post.member.username}|"></div>
+
+        <div th:text="|제목 : ${post.subject}|"></div>
+
+        <div th:text="|내용 : ${post.content}|"></div>
+
+        <div class="py-3">
+            <a th:href="@{|/post/list|}" class="btn btn-sm btn-secondary">목록</a>
+            <a th:href="@{|/post/${post.id}/modify|}" class="btn btn-sm btn-secondary">수정</a>
+            <a onclick="return confirm('정말로 삭제하시겠습니까?')" th:href="@{|/post/${post.id}/delete|}" class="btn btn-sm btn-secondary">삭제</a>
+        </div>
+
+    </div>
+</section>
+</body>
 </html>
