@@ -43,6 +43,7 @@ public class PostService {
     @Transactional
     public Long write(PostWriteRequestDto postWriteRequestDto, Member member) {
 
+        postWriteRequestDto.setContentHtml(postWriteRequestDto.getContent());
 
         return postRepository.save(postWriteRequestDto.toEntity(member)).getId();
     }

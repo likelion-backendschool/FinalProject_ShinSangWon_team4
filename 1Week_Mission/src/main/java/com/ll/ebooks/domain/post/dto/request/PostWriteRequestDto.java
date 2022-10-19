@@ -18,9 +18,9 @@ public class PostWriteRequestDto {
     @NotBlank(message = "제목은 필수 입력 사항입니다.")
     @Size(max = 200)
     private String subject;
-
     @NotBlank(message = "내용은 필수 입력 사항입니다.")
     private String content;
+    private String contentHtml;
 
     @Builder
     public PostWriteRequestDto(String subject, String content) {
@@ -32,6 +32,7 @@ public class PostWriteRequestDto {
         return Post.builder()
                 .subject(subject)
                 .content(content)
+                .contentHtml(contentHtml)
                 .member(member)
                 .build();
     }
