@@ -1,5 +1,6 @@
 package com.ll.ebooks.domain.post.service;
 
+import com.ll.ebooks.domain.global.markdown.MarkdownService;
 import com.ll.ebooks.domain.member.entity.Member;
 import com.ll.ebooks.domain.member.service.MemberService;
 import com.ll.ebooks.domain.post.dto.request.PostModifyRequestDto;
@@ -27,6 +28,7 @@ public class PostService {
 
     private final PostRepository postRepository;
     private final MemberService memberService;
+    private final MarkdownService markdownService;
 
     public List<PostListResponseDto> findAll() {
         return postRepository.findAllDesc().stream()
@@ -43,7 +45,7 @@ public class PostService {
     @Transactional
     public Long write(PostWriteRequestDto postWriteRequestDto, Member member) {
 
-        postWriteRequestDto.setContentHtml(postWriteRequestDto.getContent());
+        postWriteRequestDto.setContentHtml(markdownService.toMarkdown(postWriteRequestDto.getContent()));
 
         return postRepository.save(postWriteRequestDto.toEntity(member)).getId();
     }

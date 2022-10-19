@@ -30,12 +30,12 @@
                         <div class="card w-400 bg-base-400 shadow-xl">
                             <div class="card-body">
                                 <h2 class="card-title" th:text="|${post.subject}|"></h2>
-                                <p th:text="|${post.content}|"></p>
+                                <p th:utext="${post.contentHtml}"></p>
                             </div>
                         </div>
                         </script>
                     </div>
-                </div>
+                
 
                 <div class="py-3">
                     <a th:href="@{|/post/list|}" class="btn btn-sm btn-info">글 목록</a>
