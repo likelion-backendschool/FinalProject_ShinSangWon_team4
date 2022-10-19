@@ -107,7 +107,7 @@
                     회원가입
                 </span>
             </a>
-            <a href="javascript: document.logoutForm.submit();" class="inline-flex" sec:authorize="isAuthenticated()">
+            <a href="/member/logout" class="inline-flex" sec:authorize="isAuthenticated()">
                 <i class="fa-solid fa-arrow-right-from-bracket"></i>
                 <span class="ml-[2px] hidden sm:block">
                     로그아웃
