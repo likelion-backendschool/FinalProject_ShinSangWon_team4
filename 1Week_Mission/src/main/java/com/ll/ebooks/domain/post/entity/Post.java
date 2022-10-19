@@ -36,9 +36,10 @@ public class Post extends BaseEntity {
         this.member = member;
     }
 
-    public void modify(String subject, String content) {
+    public void modify(String subject, String content, String contentHtml) {
         this.subject = subject;
         this.content = content;
+        this.contentHtml = contentHtml;
     }
 
 }

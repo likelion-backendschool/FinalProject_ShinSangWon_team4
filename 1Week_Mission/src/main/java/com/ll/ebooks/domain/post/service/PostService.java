@@ -53,7 +53,7 @@ public class PostService {
     public Long modify(PostModifyRequestDto postModifyRequestDto, Long id) {
         Post post = postRepository.findById(id).orElseThrow(() -> new NoSuchElementException("게시물이 존재하지 않습니다."));
 
-        post.modify(postModifyRequestDto.getSubject(), postModifyRequestDto.getContent());
+        post.modify(postModifyRequestDto.getSubject(), postModifyRequestDto.getContent(), markdownService.toMarkdown(postModifyRequestDto.getContent()));
 
         return id;
 

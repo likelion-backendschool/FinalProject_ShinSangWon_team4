@@ -91,7 +91,7 @@ public class PostController {
 
         postService.modify(postModifyRequestDto, id);
 
-        return "redirect:/post/%d/modify.formatted(id)";
+        return "redirect:/post/%d".formatted(id);
     }
 
     @GetMapping("/{id}/delete")
