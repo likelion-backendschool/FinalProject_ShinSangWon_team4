@@ -55,7 +55,7 @@ public class PostService {
         return id;
 
     }
-
+    @Transactional
     public void delete(Long id) {
         Post post = postRepository.findById(id).orElseThrow(() -> new NoSuchElementException("게시물이 존재하지 않습니다."));
 
