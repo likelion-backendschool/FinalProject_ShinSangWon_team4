@@ -2,31 +2,58 @@
 <html layout:decorate="~{layout/layout.html}">
 
 <head>
-    <title>글 상세페이지</title>
+    <title>글 상세</title>
 </head>
 
 <body>
-<section layout:fragment="main" class="section container mx-auto px-10">
+<main layout:fragment="main">
+    <section class="section section-write container mx-auto">
 
-        <h1>글 상세페이지</h1>
+        <div class="px-2 pt-4">
+            <h1 class="font-bold text-lg"></h1>
+            <form class="flex flex-col gap-3">
+                <input type="hidden" name="content" />
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text"></span>
+                    </label>
+                    <div>
+                        <i class="fa-solid fa-clock"></i> 작성 : [[${#temporals.format(post.createdDate, 'yyyy-MM-dd HH:mm')}]]
+                    </div>
+                    <div class="mt-2">
+                        <i class="fa-solid fa-pen-to-square"></i> 수정 : [[${#temporals.format(post.modifiedDate, 'yyyy-MM-dd HH:mm')}]]
+                    </div>
+                </div>
 
-        <div th:text="|작성 : ${post.createdDate}|"></div>
+                    <div class="toast-ui-viewer">
+                        <script type="text/x-template">
+                        <div class="card w-400 bg-base-400 shadow-xl">
+                            <div class="card-body">
+                                <h2 class="card-title" th:text="|${post.subject}|"></h2>
+                                <p th:text="|${post.content}|"></p>
+                            </div>
+                        </div>
+                        </script>
+                    </div>
+                </div>
 
-        <div th:text="|수정 : ${post.modifiedDate}|"></div>
-
-        <div th:text="|작성자 : ${post.member.username}|"></div>
-
-        <div th:text="|제목 : ${post.subject}|"></div>
-
-        <div th:text="|내용 : ${post.content}|"></div>
-
-        <div class="py-3">
-            <a th:href="@{|/post/list|}" class="btn btn-sm btn-secondary">목록</a>
-            <a th:href="@{|/post/${post.id}/modify|}" class="btn btn-sm btn-secondary">수정</a>
-            <a onclick="if ( !confirm('정말로 삭제하시겠습니까?') ) return false;" th:href="@{|/post/${post.id}/delete|}" class="btn btn-sm btn-secondary" th:text="삭제"></a>
+                <div class="py-3">
+                    <a th:href="@{|/post/list|}" class="btn btn-sm btn-info">글 목록</a>
+                    <a th:href="@{|/post/${post.id}/modify|}" class="btn btn-sm btn-info"
+                       sec:authorize="isAuthenticated()"
+                       th:if="${post.member != null and #authentication.getPrincipal().getUsername() == post.member.username}">수정</a>
+                    <a onclick="if ( !confirm('정말로 삭제하시겠습니까?') ) return false;" th:href="@{|/post/${post.id}/delete|}"
+                       sec:authorize="isAuthenticated()"
+                       th:if="${post.member != null and #authentication.getPrincipal().getUsername() == post.member.username}"
+                       class="btn btn-sm btn-warning" th:text="삭제"></a>
+                </div>
+        </div>
+            </form>
         </div>
 
-    </div>
-</section>
+        </div>
+    </section>
+
+</main>
 </body>
 </html>

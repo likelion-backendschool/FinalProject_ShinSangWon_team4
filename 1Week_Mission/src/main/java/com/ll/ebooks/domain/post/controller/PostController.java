@@ -63,7 +63,7 @@ public class PostController {
 
         postService.write(postWriteRequestDto, optionalMember.get());
 
-        return "redirect:post/list";
+        return "redirect:/post/list";
 
     }
 
@@ -91,7 +91,7 @@ public class PostController {
 
         postService.modify(postModifyRequestDto, id);
 
-        return "redirect:post/%d/modify.formatted(id)";
+        return "redirect:/post/%d/modify.formatted(id)";
     }
 
     @GetMapping("/{id}/delete")
