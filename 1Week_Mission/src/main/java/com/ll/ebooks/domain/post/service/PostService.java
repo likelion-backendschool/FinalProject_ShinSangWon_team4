@@ -81,4 +81,10 @@ public class PostService {
 
         return false;
     }
+
+    public List<PostListResponseDto> findMainPageList() {
+        return postRepository.findTop100ByOrderByIdDesc().stream()
+                .map(PostListResponseDto::new)
+                .collect(Collectors.toList());
+    }
 }
