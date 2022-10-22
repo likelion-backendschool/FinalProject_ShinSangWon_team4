@@ -64,7 +64,7 @@ public class PostService {
 
         postRepository.delete(post);
     }
-    //글 수정, 삭제 권한이 있는지 검사하는 로직
+    //글 수정, 삭제 권한이 있는지 검사하는  로직
     public boolean isAuthorized(Long id, Principal principal) {
         Post post = postRepository.findById(id).orElseThrow(() -> new NoSuchElementException("게시물이 존재하지 않습니다."));
         Optional<Member> optionalMember = memberService.findByUsername(principal.getName());

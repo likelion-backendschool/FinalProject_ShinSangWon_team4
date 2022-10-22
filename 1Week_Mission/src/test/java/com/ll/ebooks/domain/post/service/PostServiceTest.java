@@ -1,8 +1,11 @@
 package com.ll.ebooks.domain.post.service;
 
 import com.ll.ebooks.domain.member.dto.request.JoinRequestDto;
+import com.ll.ebooks.domain.member.entity.Member;
 import com.ll.ebooks.domain.member.repository.MemberRepository;
 import com.ll.ebooks.domain.member.service.MemberService;
+import com.ll.ebooks.domain.post.dto.request.PostWriteRequestDto;
+import com.ll.ebooks.domain.post.entity.Post;
 import com.ll.ebooks.domain.post.repository.PostRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -10,6 +13,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @Transactional
 @SpringBootTest
@@ -41,6 +48,20 @@ class PostServiceTest {
     @Test
     @DisplayName("게시물_작성된다")
     void test1() {
+        //given
+        List<Member> memberList = memberRepository.findAll();
+        Member member = memberList.get(0);
+        postService.write(new PostWriteRequestDto(
+                "안녕하세요"
+               ,"반갑습니다")
+                , member);
+
+        //when
+        List<Post> postList = postRepository.findAll();
+        Post post = postList.get(0);
+
+        //then
+        assertThat(post.getSubject()).isEqualTo("안녕하세요");
 
     }
 
