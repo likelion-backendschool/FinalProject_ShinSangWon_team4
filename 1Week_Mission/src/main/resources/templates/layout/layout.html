@@ -127,6 +127,18 @@
                     비밀번호 찾기
                 </span>
             </a>
+            <a href="/post/list" class="inline-flex" sec:authorize="isAuthenticated()">
+                <i class="fa fa-list-ul" aria-hidden="true"></i>
+                <span class="ml-[2px] hidden sm:block">
+                    내 글 목록
+                </span>
+            </a>
+            <a href="/post/list" class="inline-flex" sec:authorize="isAuthenticated()">
+                <i class="fa-solid fa fa-pencil"></i>
+                <span class="ml-[2px] hidden sm:block">
+                    상품 등록
+                </span>
+            </a>
             <a href="/member/modify" class="inline-flex" sec:authorize="isAuthenticated()">
                 <i class="fa-solid fa fa-pencil"></i>
                 <span class="ml-[2px] hidden sm:block">

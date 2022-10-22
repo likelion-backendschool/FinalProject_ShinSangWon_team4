@@ -29,9 +29,7 @@
 
                 <span class="label-text">해시태그</span>
                     <ul>
-                        <li th:each="hashTag, loop : ${post.getHashTags()}">
-                            <span class="badge badge-ghost badge" th:text="|# ${hashTag.postKeyword.content}|"></span>
-                        </li>
+                        <li th:each="hashTag, loop : ${post.getHashTags()}" class="badge badge-ghost badge" th:text="|# ${hashTag.postKeyword.content}|"></li>
                     </ul>
 
 

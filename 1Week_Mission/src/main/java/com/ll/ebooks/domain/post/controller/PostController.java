@@ -29,9 +29,11 @@ public class PostController {
     private final MemberService memberService;
 
     @GetMapping("/list")
-    public String showList(Model model) {
+    public String showList(Model model, Principal principal) {
 
-        model.addAttribute("postList", postService.findAll());
+        Member member = memberService.findByUsername(principal.getName()).orElseThrow();
+
+        model.addAttribute("postList", postService.findAllByMemberId(member.getId()));
         return "post/list";
     }
 

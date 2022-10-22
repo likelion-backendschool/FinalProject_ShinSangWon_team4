@@ -37,6 +37,11 @@ public class PostService {
                 .map(PostListResponseDto::new)
                 .collect(Collectors.toList());
     }
+    public List<PostListResponseDto> findAllByMemberId(Long memberId) {
+        return postRepository.findAllByMemberIdOrderByIdDesc(memberId).stream()
+                .map(PostListResponseDto::new)
+                .collect(Collectors.toList());
+    }
 
     public PostResponseDto findById(Long id) {
 
