@@ -20,12 +20,15 @@ public class PostWriteRequestDto {
     private String subject;
     @NotBlank(message = "내용은 필수 입력 사항입니다.")
     private String content;
+
+    private String hashTags;
     private String contentHtml;
 
     @Builder
-    public PostWriteRequestDto(String subject, String content) {
+    public PostWriteRequestDto(String subject, String content, String hashTags) {
         this.subject = subject;
         this.content = content;
+        this.hashTags = hashTags;
     }
 
     public Post toEntity(Member member) {

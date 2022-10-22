@@ -24,11 +24,13 @@ public interface InitDataBefore {
         postService.write(PostWriteRequestDto.builder()
                         .subject("안녕하세요")
                         .content("반갑습니다")
+                        .hashTags("#자바 #프로그래밍")
                 .build(), memberService.findByUsername("dnjsml30").orElseThrow());
 
         postService.write(PostWriteRequestDto.builder()
                 .subject("반갑습니다")
                 .content("안녕하세요")
+                        .hashTags("#스프링 #스프링부트")
                 .build(), memberService.findByUsername("test123").orElseThrow());
 
     }

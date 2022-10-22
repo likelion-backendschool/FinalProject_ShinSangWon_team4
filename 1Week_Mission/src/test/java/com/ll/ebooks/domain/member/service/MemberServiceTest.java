@@ -18,6 +18,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+//tast data -> com.ll.ebooks.domain.global.initdata.InitDataBefore
 @Transactional
 @SpringBootTest
 class MemberServiceTest {

@@ -9,6 +9,7 @@ import com.ll.ebooks.domain.post.dto.response.PostListResponseDto;
 import com.ll.ebooks.domain.post.dto.response.PostResponseDto;
 import com.ll.ebooks.domain.post.entity.Post;
 import com.ll.ebooks.domain.post.repository.PostRepository;
+import com.ll.ebooks.domain.posttag.service.PostTagService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -29,6 +30,7 @@ public class PostService {
     private final PostRepository postRepository;
     private final MemberService memberService;
     private final MarkdownService markdownService;
+    private final PostTagService postTagService;
 
     public List<PostListResponseDto> findAll() {
         return postRepository.findAllDesc().stream()
@@ -46,8 +48,10 @@ public class PostService {
     public Long write(PostWriteRequestDto postWriteRequestDto, Member member) {
 
         postWriteRequestDto.setContentHtml(markdownService.toMarkdown(postWriteRequestDto.getContent()));
+        Post savedPost = postRepository.save(postWriteRequestDto.toEntity(member));
+        postTagService.mapToPostHashTags(savedPost, postWriteRequestDto.getHashTags());
 
-        return postRepository.save(postWriteRequestDto.toEntity(member)).getId();
+        return savedPost.getId();
     }
     @Transactional
     public Long modify(PostModifyRequestDto postModifyRequestDto, Long id) {
