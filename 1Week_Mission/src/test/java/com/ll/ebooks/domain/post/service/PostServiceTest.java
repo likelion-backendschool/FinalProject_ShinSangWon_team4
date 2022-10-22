@@ -71,5 +71,11 @@ class PostServiceTest {
 
     }
 
+    @Test
+    @DisplayName("1번_게시물의_해시태그_수정된다")
+    void test3() {
+        
+    }
+
 
 }

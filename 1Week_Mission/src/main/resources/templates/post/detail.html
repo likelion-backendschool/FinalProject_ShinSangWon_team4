@@ -25,6 +25,19 @@
                     </div>
                 </div>
 
+
+
+                <span class="label-text">해시태그</span>
+                    <ul>
+                        <li th:each="hashTag, loop : ${post.getHashTags()}">
+                            <span class="badge badge-ghost badge" th:text="|# ${hashTag.postKeyword.content}|"></span>
+                        </li>
+                    </ul>
+
+
+
+
+
                     <div class="toast-ui-viewer">
                         <script type="text/x-template">
                         <div class="card w-400 bg-base-400 shadow-xl">

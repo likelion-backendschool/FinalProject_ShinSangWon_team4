@@ -20,9 +20,12 @@ public class PostModifyRequestDto {
     @NotBlank(message = "내용은 필수 입력 사항입니다.")
     private String content;
 
+    private String hashTags;
+
     @Builder
-    public PostModifyRequestDto(String subject, String content) {
+    public PostModifyRequestDto(String subject, String content, String hashTags) {
         this.subject = subject;
         this.content = content;
+        this.hashTags = hashTags;
     }
 }

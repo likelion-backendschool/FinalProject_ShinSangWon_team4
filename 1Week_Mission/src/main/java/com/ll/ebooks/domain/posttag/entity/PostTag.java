@@ -6,6 +6,7 @@ import com.ll.ebooks.domain.post.entity.Post;
 import com.ll.ebooks.domain.postkeyword.entity.PostKeyword;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -16,6 +17,7 @@ import javax.persistence.ManyToOne;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@Getter
 @Entity
 public class PostTag extends BaseEntity {
 

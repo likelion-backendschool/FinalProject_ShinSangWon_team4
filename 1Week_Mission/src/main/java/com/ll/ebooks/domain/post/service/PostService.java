@@ -56,7 +56,7 @@ public class PostService {
     @Transactional
     public Long modify(PostModifyRequestDto postModifyRequestDto, Long id) {
         Post post = postRepository.findById(id).orElseThrow(() -> new NoSuchElementException("게시물이 존재하지 않습니다."));
-
+        postTagService.mapToPostHashTags(post, postModifyRequestDto.getHashTags());
         post.modify(postModifyRequestDto.getSubject(), postModifyRequestDto.getContent(), markdownService.toMarkdown(postModifyRequestDto.getContent()));
 
         return id;
