@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html layout:decorate="~{layout/layout.html}">
+
+<head>
+    <title>도서 정보</title>
+</head>
+
+<body>
+<main layout:fragment="main">
+    <section class="section section-write container mx-auto">
+
+        <div class="px-2 pt-4">
+            <h1 class="font-bold text-lg">
+                <i class="fa-solid fa-book-open"></i>
+                도서 정보
+            </h1>
+
+            <div class="flex flex-col mt-2 gap-3">
+                <div>
+                    <h2 class="font-bold" th:text="|제목 : ${product.subject}|"></h2>
+                </div>
+
+                <div class="flex">
+                    <div th:text="|작가 : ${product.member.nickname}|"></div>
+                </div>
+
+                <div th:text="|￦ ${product.price}|"></div>
+
+                <div class="flex flex-wrap gap-3">
+                    <div class="flex flex-wrap gap-3">
+                        <div>
+                            <div class="badge">
+                                <i class="fa-solid fa-pen"></i>
+                                <span class="ml-1">작성</span>
+                                <span class="ml-1"
+                                      th:text="${#temporals.format(product.createdDate, 'yy-MM-dd HH:mm')}"></span>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="badge badge-outline">
+                                <i class="fa-solid fa-eraser"></i>
+                                <span class="ml-1">수정</span>
+                                <span class="ml-1"
+                                      th:text="${#temporals.format(product.modifiedDate, 'yy-MM-dd HH:mm')}"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <a th:href="@{|/product/list|}" class="btn btn-sm btn-info">도서 목록</a>
+                    <a th:href="@{|/product/${product.id}/modify|}" class="btn btn-sm btn-info"
+                       sec:authorize="isAuthenticated()"
+                       th:if="${product.member != null and #authentication.getPrincipal().getUsername() == product.member.username}">수정</a>
+                    <a onclick="if ( !confirm('정말로 삭제하시겠습니까?') ) return false;" th:href="@{|/product/${product.id}/remove|}"
+                       sec:authorize="isAuthenticated()"
+                       th:if="${product.member != null and #authentication.getPrincipal().getUsername() == product.member.username}"
+                       class="btn btn-sm btn-warning" th:text="삭제"></a>
+                </div>
+
+                <div>
+                    <h2 class="font-bold"><i class="fa-solid fa-indent"></i> 목차</h2>
+
+                    <ol class="pl-6 mt-2">
+                        <li style="list-style: decimal" class="mt-1"
+                            th:each="i : ${#numbers.sequence(posts.size() - 1, 0, -1)}"
+                            th:with="post=${posts[i]}">
+                            <a class="text-link" target="_blank" th:href="@{|/post/${post.id}|}"
+                               th:text="|${post.subject}|"></a>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+
+
+        </div>
+    </section>
+
+</main>
+</body>
+</html>
