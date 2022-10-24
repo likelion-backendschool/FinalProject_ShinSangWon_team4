@@ -58,5 +58,7 @@ class CartItemServiceTest {
         CartItem cartItem2 = cartItemService.addItem(buyer, product2);
 
         assertThat(cartItemService.hasItem(buyer, product1)).isTrue();
+        cartItemService.removeItem(buyer, product1);
+        assertThat(cartItemService.hasItem(buyer, product1)).isFalse();
     }
 }

@@ -33,4 +33,22 @@ public class CartItemService {
         return newCartItem;
     }
 
+    @Transactional
+    public boolean removeItem(Member member, Product product) {
+
+        CartItem cartItem = cartItemRepository.findByMemberIdAndProductId(member.getId(), product.getId()).orElse(null);
+
+        if( cartItem != null) {
+            cartItemRepository.delete(cartItem);
+            return true;
+        }
+
+        return false;
+
+    }
+
+    public boolean hasItem(Member member, Product product) {
+
+        return cartItemRepository.existsByMemberIdAndProductId(member.getId(), product.getId());
+    }
 }
