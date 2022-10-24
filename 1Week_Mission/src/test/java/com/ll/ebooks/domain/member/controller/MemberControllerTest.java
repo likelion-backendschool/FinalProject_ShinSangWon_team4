@@ -1,6 +1,5 @@
 package com.ll.ebooks.domain.member.controller;
 
-import com.ll.ebooks.domain.member.dto.request.JoinRequestDto;
 import com.ll.ebooks.domain.member.service.MemberService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -78,12 +77,6 @@ public class MemberControllerTest {
     void test3() throws Exception {
 
         //given
-        memberService.join(JoinRequestDto.builder()
-                .username("dnjsml30")
-                .password("test123!")
-                .email("dnjsml30@naver.com")
-                .nickname("상원")
-                .build());
 
         //when
         mockMvc.perform(post("/member/login")

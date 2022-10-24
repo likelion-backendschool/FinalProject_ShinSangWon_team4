@@ -42,12 +42,13 @@ public class MemberService {
 
         Long memberId = memberRepository.save(joinRequestDto.toEntity(Role.WRITER)).getId();
 
-        /* 메일 전송 */
-        SimpleMailMessage message = new SimpleMailMessage();
+        /* 메일 전송 - 메일이 너무 많이 보내져서 비활성화 ... (기능 동작)*/
+
+/*        SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(joinRequestDto.getEmail());
         message.setSubject("멋북스 회원가입을 축하합니다.");
         message.setText("재밋게 즐겨주세요.");
-        javaMailSender.send(message);
+        javaMailSender.send(message);*/
 
         return memberId;
 

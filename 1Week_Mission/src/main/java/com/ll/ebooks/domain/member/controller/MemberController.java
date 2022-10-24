@@ -23,7 +23,7 @@ import javax.validation.Valid;
 import java.security.Principal;
 import java.util.Optional;
 
-// TODO : 에러메세지 성공메세지 띄우기 !!! (기능 구현 먼저 하고 . . .), 전체적인 코드 리팩토링
+// TODO : 에러메세지 성공메세지 띄우기 !!! (기능 구현 먼저 하고 . . .), 전체적인 코드 리팩토링, 닉네임에 null값 입력받기
 @RequiredArgsConstructor
 @RequestMapping("/member")
 @Controller
@@ -34,7 +34,6 @@ public class MemberController {
     @PreAuthorize("isAnonymous()")
     @GetMapping("/join")
     public String JoinForm(JoinRequestDto joinRequestDto) {
-
 
         return "member/JoinForm";
     }

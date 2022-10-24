@@ -18,6 +18,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+//tast data -> com.ll.ebooks.domain.global.initdata.InitDataBefore
 @Transactional
 @SpringBootTest
 class MemberServiceTest {
@@ -33,12 +34,12 @@ class MemberServiceTest {
 
     @BeforeEach
     void tearUp() {
-        memberService.join(JoinRequestDto.builder()
+/*        memberService.join(JoinRequestDto.builder()
                 .username("dnjsml30")
                 .password("test123!")
                 .email("dnjsml30@naver.com")
                 .nickname("상원")
-                .build());
+                .build());*/
     }
 
     @Test
@@ -62,9 +63,9 @@ class MemberServiceTest {
     void test2() {
 
         memberService.join(JoinRequestDto.builder()
-                .username("test123")
+                .username("test1234")
                 .password("test123!")
-                .email("test123@naver.com")
+                .email("test1234@naver.com")
                 .nickname("")
                 .build());
 
@@ -72,7 +73,7 @@ class MemberServiceTest {
         List<Member> memberList = memberRepository.findAll();
 
         //then
-        Member member = memberList.get(1);
+        Member member = memberList.get(2);
 
         assertThat(member.getRole()).isEqualTo(Role.MEMBER);
     }

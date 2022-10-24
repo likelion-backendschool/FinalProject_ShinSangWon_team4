@@ -71,10 +71,18 @@
 
                 <div class="form-control">
                     <label class="label">
+                        <span class="label-text">해시태그</span>
+                    </label>
+                    <input autofocus type="text" name="hashTags" placeholder="#자바 #스프링부트" class="input input-bordered"
+                           maxlength="200" th:value="${post.getHashTagToString()}">
+                </div>
+
+                <div class="form-control">
+                    <label class="label">
                         <span class="label-text">내용</span>
                     </label>
 
-                    <div class="toast-ui-editor" toast-ui-editor--height="calc(100vh - 300px)" th:text="${post.contentHtml}"></div>
+                    <div class="toast-ui-editor" toast-ui-editor--height="calc(100vh - 300px)" th:text="${post.content}"></div>
                 </div>
 
 
