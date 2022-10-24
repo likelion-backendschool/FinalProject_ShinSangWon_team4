@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -29,5 +30,13 @@ public class PostKeywordService {
                 .build();
 
         return postKeywordRepository.save(postKeyword);
+    }
+
+    public Optional<PostKeyword> findById(long id) {
+        return postKeywordRepository.findById(id);
+    }
+
+    public List<PostKeyword> findByMemberId(Long authorId) {
+        return postKeywordRepository.getQslAllByMemberId(authorId);
     }
 }

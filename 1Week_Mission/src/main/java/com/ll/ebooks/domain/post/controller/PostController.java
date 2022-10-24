@@ -20,6 +20,8 @@ import javax.validation.Valid;
 import java.security.Principal;
 import java.util.Optional;
 
+//TODO home -> 게시물 전체 출력, 해시태그 출력?? 출력이라면, 눌르면 전체 게시글 중 해시태그만 ??
+// 내 게시물에서, 해시태그를 누르면 ?? 내 게시물 해시태그만 ?? ?????
 @RequiredArgsConstructor
 @RequestMapping("/post")
 @Controller
@@ -46,7 +48,7 @@ public class PostController {
     }
 
     @GetMapping("/write")
-    public String writeForm(PostWriteRequestDto postWriteRequestDto) {
+    public String showWrite(PostWriteRequestDto postWriteRequestDto) {
         return "post/write";
     }
 

@@ -7,6 +7,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
+import javax.persistence.Transient;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -17,4 +20,9 @@ public class PostKeyword extends BaseEntity {
 
     private String content;
 
+    @Transient
+    private Map<String, Object> extra = new LinkedHashMap<>();
+    public long getExtra_postTagsCount() {
+        return (long) getExtra().get("postTagsCount");
+    }
 }
