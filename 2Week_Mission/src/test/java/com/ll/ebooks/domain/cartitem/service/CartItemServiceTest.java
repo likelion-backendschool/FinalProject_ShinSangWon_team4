@@ -45,4 +45,18 @@ class CartItemServiceTest {
         assertThat(cartItem1).isNotNull();
         assertThat(cartItem2).isNotNull();
     }
+
+    @Test
+    @DisplayName("상품_장바구니에서_제거된다")
+    void test2() {
+        Member buyer = memberRepository.findByUsername("test123").get();
+
+        Product product1 = productRepository.findById(1L).get();
+        Product product2 = productRepository.findById(2L).get();
+
+        CartItem cartItem1 = cartItemService.addItem(buyer, product1);
+        CartItem cartItem2 = cartItemService.addItem(buyer, product2);
+
+        assertThat(cartItemService.hasItem(buyer, product1)).isTrue();
+    }
 }
