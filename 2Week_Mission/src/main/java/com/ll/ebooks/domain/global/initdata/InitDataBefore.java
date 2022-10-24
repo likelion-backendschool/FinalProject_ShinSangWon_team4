@@ -39,10 +39,16 @@ public interface InitDataBefore {
                 .hashTags("#스프링 #스프링부트")
                 .build(), memberService.findByUsername("test123").orElseThrow());
 
+        //상품 생성
         ProductCreateRequestDto productCreateRequestDto = new ProductCreateRequestDto("자바의 정석", 30000);
         productCreateRequestDto.setPostKeyword(postKeywordService.findById(1L).orElseThrow());
 
         productRepository.save(productCreateRequestDto.toEntity(memberService.findByUsername("dnjsml30").orElseThrow()));
+
+        ProductCreateRequestDto productCreateRequestDto2 = new ProductCreateRequestDto("프로그래밍의 정석", 70000);
+        productCreateRequestDto2.setPostKeyword(postKeywordService.findById(2L).orElseThrow());
+
+        productRepository.save(productCreateRequestDto2.toEntity(memberService.findByUsername("dnjsml30").orElseThrow()));
 
     }
 }
