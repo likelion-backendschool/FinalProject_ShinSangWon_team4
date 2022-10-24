@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html layout:decorate="~{layout/layout.html}">
+
+<body>
+<main layout:fragment="main">
+    <section class="section container mx-auto px-4">
+        <br/>
+        <h1>장바구니</h1>
+        <br/>
+        <div class="overflow-x-auto relative">
+            <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                <thead class="text-xs text-gray-700 uppercase bg-blue-50 dark:bg-gray-700 dark:text-gray-400">
+                <tr>
+                    <th scope="col" class="py-3 px-6">번호</th>
+                    <th scope="col" class="py-3 px-6">제목</th>
+                    <th scope="col" class="py-3 px-6">가격</th>
+                    <th scope="col" class="py-3 px-6">작성자</th>
+                    <th scope="col" class="py-3 px-6">작성날짜</th>
+                    <th scope="col" class="py-3 px-6">수정날짜</th>
+                </tr>
+                </thead>
+                <tbody>
+                <th:block th:each="cartitem : ${cartItemList}">
+                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                        <th scope="row" class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white" th:text="${cartitem.id}"></th>
+                        <td class="py-4 px-6">
+                            <a th:href="@{|/product/${cartitem.id}|}" th:text="${cartitem.product.subject}"></a>
+                        </td>
+                        <td class="py-4 px-6" th:text="${cartitem.product.price}"></td>
+                        <td class="py-4 px-6" th:text="${cartitem.member.username}"></td>
+                        <td class="py-4 px-6" th:text="${#temporals.format(cartitem.createdDate, 'yyyy-MM-dd hh:mm')}"></td>
+                        <td class="py-4 px-6" th:text="${#temporals.format(cartitem.modifiedDate, 'yyyy-MM-dd hh:mm')}"></td>
+                    </tr>
+                </th:block>
+                </tbody>
+            </table>
+        </div>
+        <br/>
+    </section>
+
+</main>
+</body>
+</html>

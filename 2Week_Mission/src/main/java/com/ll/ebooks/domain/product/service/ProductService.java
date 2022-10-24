@@ -43,12 +43,17 @@ public class ProductService {
 
         return productRepository.save(productCreateRequestDto.toEntity(member)).getId();
     }
-
-    public ProductResponseDto findById(long id) {
+    //controller의 요청에 따른 필요한 값만 전달할 때
+    public ProductResponseDto findById(Long id) {
 
         Product entity = productRepository.findById(id).orElseThrow(() -> new NoSuchElementException("게시물이 존재하지 않습니다."));
 
         return new ProductResponseDto(entity);
+    }
+    //객체 자체가 필요할 때
+    public <Optional>Product findProductById(Long id) {
+
+        return productRepository.findById(id).orElse(null);
     }
 
     public List<Post> findPostsByProduct(ProductResponseDto product) {
@@ -64,6 +69,12 @@ public class ProductService {
 
     public List<ProductListResponseDto> findAllByMemberId(Long memberId) {
         return productRepository.findAllByMemberIdOrderByIdDesc(memberId).stream()
+                .map(ProductListResponseDto::new)
+                .collect(Collectors.toList());
+    }
+
+    public List<ProductListResponseDto> findAll() {
+        return productRepository.findAllByOrderByIdDesc().stream()
                 .map(ProductListResponseDto::new)
                 .collect(Collectors.toList());
     }

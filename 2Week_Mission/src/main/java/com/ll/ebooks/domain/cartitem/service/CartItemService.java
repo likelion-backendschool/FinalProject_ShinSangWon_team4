@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 @Service
@@ -51,4 +53,10 @@ public class CartItemService {
 
         return cartItemRepository.existsByMemberIdAndProductId(member.getId(), product.getId());
     }
+
+    public List<CartItem> findAllByMemberId(Long id) {
+        return cartItemRepository.findAllByMemberIdOrderByIdDesc(id);
+    }
+
+
 }

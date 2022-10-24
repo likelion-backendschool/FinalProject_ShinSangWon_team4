@@ -133,7 +133,7 @@
                     내 글 목록
                 </span>
             </a>
-            <a href="/product/list" class="inline-flex" sec:authorize="hasAnyAuthority('WRITER')">
+            <a href="/product/list" class="inline-flex" sec:authorize="isAuthenticated()">
                 <i class="fa-solid fa fa-pencil"></i>
                 <span class="ml-[2px] hidden sm:block">
                     상품 목록
