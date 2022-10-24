@@ -1,5 +1,6 @@
 package com.ll.ebooks.domain.cartitem.service;
 
+import com.ll.ebooks.domain.cartitem.entity.CartItem;
 import com.ll.ebooks.domain.member.entity.Member;
 import com.ll.ebooks.domain.member.repository.MemberRepository;
 import com.ll.ebooks.domain.post.service.PostService;
@@ -11,6 +12,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @Transactional
 @SpringBootTest
@@ -39,5 +42,7 @@ class CartItemServiceTest {
         CartItem cartItem1 = cartItemService.addItem(buyer, product1);
         CartItem cartItem2 = cartItemService.addItem(buyer, product2);
 
+        assertThat(cartItem1).isNotNull();
+        assertThat(cartItem2).isNotNull();
     }
 }
