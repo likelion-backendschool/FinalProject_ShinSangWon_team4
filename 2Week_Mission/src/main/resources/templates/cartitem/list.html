@@ -17,6 +17,7 @@
                     <th scope="col" class="py-3 px-6">작성자</th>
                     <th scope="col" class="py-3 px-6">작성날짜</th>
                     <th scope="col" class="py-3 px-6">수정날짜</th>
+                    <th scope="col" class="py-3 px-1"></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -30,12 +31,19 @@
                         <td class="py-4 px-6" th:text="${cartitem.product.member.username}"></td>
                         <td class="py-4 px-6" th:text="${#temporals.format(cartitem.createdDate, 'yyyy-MM-dd hh:mm')}"></td>
                         <td class="py-4 px-6" th:text="${#temporals.format(cartitem.modifiedDate, 'yyyy-MM-dd hh:mm')}"></td>
+                        <td>
+                            <a onclick="if ( !confirm('정말로 삭제하시겠습니까?') ) return false;" th:href="@{|/cart/remove/${cartitem.id}|}"
+                               class="delete btn btn-sm btn btn-warning"
+                               sec:authorize="isAuthenticated()"
+                               th:text="삭제"></a>
+                        </td>
                     </tr>
                 </th:block>
                 </tbody>
             </table>
         </div>
         <br/>
+
     </section>
 
 </main>

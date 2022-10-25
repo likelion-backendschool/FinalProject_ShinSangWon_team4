@@ -17,6 +17,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 //TODO 장바구니 삭제 뷰 구현
 @RequiredArgsConstructor
@@ -49,6 +50,24 @@ public class CartItemController {
         }
 
         cartItemService.addItem(member, product);
+
+        return "redirect:/cart/list";
+    }
+
+    @GetMapping("/remove/{cartitemId}")
+    public String removeCartItem(@PathVariable Long cartitemId, Principal principal) {
+
+        CartItem cartItem = cartItemService.findById(cartitemId);
+
+        if(cartItem == null) {
+            throw new NoSuchElementException("장바구니에 해당 품목이 없습니다.");
+        }
+
+        if(cartItem.getMember().getId() != memberService.findByUsername(principal.getName()).get().getId()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "잘못된 요청입니다.");
+        }
+
+        cartItemService.removeItem(cartItem);
 
         return "redirect:/cart/list";
     }

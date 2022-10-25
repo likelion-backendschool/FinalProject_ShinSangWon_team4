@@ -68,4 +68,8 @@ public class CartItemService {
         return cartItemRepository.findAllByMemberId(member.getId());
     }
 
+    public CartItem findById(Long cartitemId) {
+        return cartItemRepository.findById(cartitemId).orElse(null);
+    }
+
 }
