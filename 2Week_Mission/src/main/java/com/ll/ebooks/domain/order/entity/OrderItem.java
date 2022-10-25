@@ -1,7 +1,7 @@
 package com.ll.ebooks.domain.order.entity;
 
 import com.ll.ebooks.domain.global.entity.BaseEntity;
-import com.ll.ebooks.domain.member.entity.Member;
+import com.ll.ebooks.domain.product.entity.Product;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -19,7 +19,7 @@ public class OrderItem extends BaseEntity {
     private Order order;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    private Member member;
+    private Product product;
 
     private LocalDateTime payDate;
 
@@ -30,5 +30,23 @@ public class OrderItem extends BaseEntity {
     private int payPrice;
     private int refundPrice;
     private boolean isPaid;
-    
+
+    public OrderItem(Product product) {
+        this.product = product;
+        this.price = product.getPrice();
+        this.salePrice = product.getSalePrice();
+        this.wholesalePrice = product.getWholesalePrice();
+    }
+
+    public void mapToOrder(Order order) {
+        this.order = order;
+    }
+
+    public void setPaymentDone() {
+        this.pgFee = 0;
+        this.payPrice = getSalePrice();
+        this.isPaid = true;
+        this.payDate = LocalDateTime.now();
+    }
+
 }

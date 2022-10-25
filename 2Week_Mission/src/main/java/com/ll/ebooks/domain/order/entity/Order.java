@@ -2,6 +2,7 @@ package com.ll.ebooks.domain.order.entity;
 
 import com.ll.ebooks.domain.global.entity.BaseEntity;
 import com.ll.ebooks.domain.member.entity.Member;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -26,11 +27,40 @@ public class Order extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     private Member member;
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<OrderItem> orderItems = new ArrayList<>();
 
     private LocalDateTime patDate;
 
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus; // 주문 상태 : READY, ORDER, CANCELED, REFUNDED
+
+    @Builder
+    public Order(Member member) {
+        this.member = member;
+        this.orderStatus = OrderStatus.READY;
+    }
+
+    public void addOrderItem(OrderItem orderItem) {
+        orderItem.mapToOrder(this);
+        orderItems.add(orderItem);
+    }
+
+    public int getTotalPayPrice() {
+        int payPrice = 0;
+
+        for(OrderItem orderItem : orderItems) {
+            payPrice += orderItem.getPayPrice();
+        }
+
+        return payPrice;
+    }
+
+    public void setPaymentDone() {
+        for(OrderItem orderItem : orderItems) {
+            orderItem.setPaymentDone();
+        }
+
+        this.orderStatus = OrderStatus.PAID;
+    }
 }

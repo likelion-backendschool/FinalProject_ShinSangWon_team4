@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -38,7 +39,7 @@ public class CartItemService {
     @Transactional
     public boolean removeItem(Member member, Product product) {
 
-        CartItem cartItem = cartItemRepository.findByMemberIdAndProductId(member.getId(), product.getId()).orElse(null);
+        CartItem cartItem = cartItemRepository.findByMemberIdAndProductId(member.getId(), product.getId()).orElseThrow(NoSuchElementException::new);
 
         if( cartItem != null) {
             cartItemRepository.delete(cartItem);
@@ -47,6 +48,11 @@ public class CartItemService {
 
         return false;
 
+    }
+
+    @Transactional
+    public void removeItem(CartItem cartItem) {
+        cartItemRepository.delete(cartItem);
     }
 
     public boolean hasItem(Member member, Product product) {
@@ -58,5 +64,8 @@ public class CartItemService {
         return cartItemRepository.findAllByMemberIdOrderByIdDesc(id);
     }
 
+    public List<CartItem> findItemsByMember(Member member) {
+        return cartItemRepository.findAllByMemberId(member.getId());
+    }
 
 }
