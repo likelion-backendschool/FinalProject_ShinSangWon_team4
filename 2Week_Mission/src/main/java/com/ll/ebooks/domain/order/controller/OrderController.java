@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ll.ebooks.domain.member.entity.Member;
 import com.ll.ebooks.domain.member.service.MemberService;
 import com.ll.ebooks.domain.order.entity.Order;
+import com.ll.ebooks.domain.order.exception.NotEnoughMoneyException;
 import com.ll.ebooks.domain.order.exception.NotMatchedOrderIdException;
 import com.ll.ebooks.domain.order.service.OrderService;
 import lombok.RequiredArgsConstructor;
@@ -111,7 +112,7 @@ public class OrderController {
             @RequestParam String paymentKey,
             @RequestParam String orderId,
             @RequestParam Long amount,
-            Model model) throws Exception {
+            Model model, Principal principal) throws Exception {
 
         Order order = orderService.findById(id);
         long paymentOrderId = Long.parseLong(orderId.split("__")[1]);
@@ -127,7 +128,15 @@ public class OrderController {
 
         Map<String, String> payloadMap = new HashMap<>();
         payloadMap.put("orderId", orderId);
-        payloadMap.put("amount", String.valueOf(order.getTotalPayPrice())); // 직접 가격 넣어주기
+        payloadMap.put("amount", String.valueOf(amount));
+
+        Member member = memberService.findByUsername(principal.getName()).orElseThrow(() -> new NoSuchElementException("비정상적인 접근입니다."));
+        int restCash = memberService.getRestCash(member);
+        int restPayCash = (int) (order.getTotalPayPrice() - amount);
+
+        if(restPayCash > restCash) {
+            throw new NotEnoughMoneyException();
+        }
 
         HttpEntity<String> request = new HttpEntity<>(objectMapper.writeValueAsString(payloadMap), headers);
 
@@ -137,7 +146,7 @@ public class OrderController {
         if (responseEntity.getStatusCode() == HttpStatus.OK) {
 
             //결제 로직 구현
-            orderService.payOnlyTossPayments(order);
+            orderService.payTossPayments(order, restPayCash);
 
             JsonNode successNode = responseEntity.getBody();
             model.addAttribute("orderId", successNode.get("orderId").asText());

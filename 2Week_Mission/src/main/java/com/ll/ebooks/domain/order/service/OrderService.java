@@ -6,6 +6,7 @@ import com.ll.ebooks.domain.member.entity.Member;
 import com.ll.ebooks.domain.member.service.MemberService;
 import com.ll.ebooks.domain.order.entity.Order;
 import com.ll.ebooks.domain.order.entity.OrderItem;
+import com.ll.ebooks.domain.order.exception.NotEnoughMoneyException;
 import com.ll.ebooks.domain.order.repository.OrderRepository;
 import com.ll.ebooks.domain.product.entity.Product;
 import lombok.RequiredArgsConstructor;
@@ -67,10 +68,10 @@ public class OrderService {
         int payPrice = order.getTotalPayPrice();
 
         if(payPrice > restCash) {
-            throw new RuntimeException("예치금이 부족합니다.");
+            throw new NotEnoughMoneyException();
         }
 
-        memberService.addCash(member, payPrice * -1, "주문결제_예치금결제");
+        memberService.addCash(member, payPrice * -1, "주문결제_예치금");
 
         order.setPaymentDone();
         orderRepository.save(order);
@@ -78,14 +79,19 @@ public class OrderService {
     }
 
     @Transactional
-    public void payOnlyTossPayments(Order order) {
+    public void payTossPayments(Order order, long restPayCash) {
 
         Member member = order.getMember(); // 구매자
-
         int payPrice = order.getTotalPayPrice();
+
         //Tosspayments를 예치금 시스템에 편입시키기
-        memberService.addCash(member, payPrice, "주문결제충전_토스페이먼츠");
-        memberService.addCash(member, payPrice * -1, "주문결제_토스페이먼츠");
+        int pgPayPrice = (int) (payPrice - restPayCash);
+        memberService.addCash(member, pgPayPrice, "주문결제충전_토스페이먼츠");
+        memberService.addCash(member, pgPayPrice * -1, "주문결제_토스페이먼츠");
+
+        if( restPayCash > 0) {
+            memberService.addCash(member, (int) restPayCash * -1, "주문결제_토스페이먼츠");
+        }
 
         order.setPaymentDone();
         orderRepository.save(order);
