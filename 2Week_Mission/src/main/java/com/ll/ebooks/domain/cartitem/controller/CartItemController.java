@@ -18,6 +18,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.security.Principal;
 import java.util.List;
 
+//TODO 장바구니 삭제 뷰 구현
 @RequiredArgsConstructor
 @RequestMapping("/cart")
 @Controller

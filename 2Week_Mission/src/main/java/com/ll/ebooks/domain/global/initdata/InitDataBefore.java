@@ -26,6 +26,9 @@ public interface InitDataBefore {
                 .email("test@naver.com")
                 .nickname("")
                 .build());
+        //예치금 충전
+        memberService.addCash(memberService.findByUsername("dnjsml30").orElseThrow(), 100_000, "무통장입금");
+        memberService.addCash(memberService.findByUsername("test123").orElseThrow(), 100_000, "카드결제");
 
         postService.write(PostWriteRequestDto.builder()
                         .subject("안녕하세요")

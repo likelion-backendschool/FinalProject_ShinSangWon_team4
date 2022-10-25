@@ -37,6 +37,8 @@ public class Member extends BaseEntity {
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<Post> posts;
 
+    private int restCash = 0;
+
     @Builder
     public Member(String username, String password, String nickname, String email, Role role) {
         this.username = username;
@@ -54,5 +56,9 @@ public class Member extends BaseEntity {
 
     public void modifyPassword(String password) {
         this.password = password;
+    }
+
+    public void modifyCash(int newCash) {
+        this.restCash = newCash;
     }
 }

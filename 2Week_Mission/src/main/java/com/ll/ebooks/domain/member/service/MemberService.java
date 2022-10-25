@@ -1,5 +1,7 @@
 package com.ll.ebooks.domain.member.service;
 
+import com.ll.ebooks.domain.cash.entity.CashLog;
+import com.ll.ebooks.domain.cash.service.CashService;
 import com.ll.ebooks.domain.member.dto.request.JoinRequestDto;
 import com.ll.ebooks.domain.member.dto.request.MemberInfoModifyRequestDto;
 import com.ll.ebooks.domain.member.dto.request.MemberPasswordModifyRequestDto;
@@ -26,6 +28,8 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
     private final JavaMailSender javaMailSender;
+
+    private final CashService cashService;
 
     public Optional<Member> findByUsername(String username) {
         return memberRepository.findByUsername(username);
@@ -112,6 +116,16 @@ public class MemberService {
         javaMailSender.send(message);
 
         member.modifyPassword(passwordEncoder.encode(tempPassword));
+
+        return member.getId();
+    }
+
+    @Transactional
+    public Long addCash(Member member, int price, String eventType) {
+        CashLog cashLog = cashService.addCash(member, price, eventType);
+
+        int newRestCash = member.getRestCash() + cashLog.getPrice();
+        member.modifyCash(newRestCash);
 
         return member.getId();
     }
