@@ -28,8 +28,8 @@
                 orderId: "order__" + orderId,
                 orderName,
                 customerName: buyerName,
-                successUrl: window.location.origin + "/success",
-                failUrl: window.location.origin + "/fail",
+                successUrl: window.location.origin +"/order/" + orderId + "/success",
+                failUrl: window.location.origin + "/order/" + orderId + "/fail",
             };
 
             tossPayments.requestPayment(method, paymentData);
