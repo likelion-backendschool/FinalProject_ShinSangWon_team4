@@ -58,7 +58,7 @@ public class ProductService {
 
     public List<Post> findPostsByProduct(ProductResponseDto product) {
         Member member = product.getMember();
-        PostKeyword postKeyword = product.getPostKeyword();
+        PostKeyword postKeyword = postKeywordService.findById(product.getPostKeyword().getId()).orElse(null);
         List<PostTag> postTags = postTagService.getPostTags(member.getId(), postKeyword.getId());
 
         return postTags

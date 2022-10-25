@@ -50,6 +50,6 @@ public class CartItemController {
 
         cartItemService.addItem(member, product);
 
-        return "/cartitem/list";
+        return "redirect:/cart/list";
     }
 }

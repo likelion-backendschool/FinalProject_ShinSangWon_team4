@@ -24,10 +24,10 @@
                     <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                         <th scope="row" class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white" th:text="${cartitem.id}"></th>
                         <td class="py-4 px-6">
-                            <a th:href="@{|/product/${cartitem.id}|}" th:text="${cartitem.product.subject}"></a>
+                            <a th:href="@{|/product/${cartitem.product.id}|}" th:text="${cartitem.product.subject}"></a>
                         </td>
                         <td class="py-4 px-6" th:text="${cartitem.product.price}"></td>
-                        <td class="py-4 px-6" th:text="${cartitem.member.username}"></td>
+                        <td class="py-4 px-6" th:text="${cartitem.product.member.username}"></td>
                         <td class="py-4 px-6" th:text="${#temporals.format(cartitem.createdDate, 'yyyy-MM-dd hh:mm')}"></td>
                         <td class="py-4 px-6" th:text="${#temporals.format(cartitem.modifiedDate, 'yyyy-MM-dd hh:mm')}"></td>
                     </tr>
