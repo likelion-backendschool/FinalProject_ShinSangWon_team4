@@ -53,7 +53,7 @@ public class OrderService {
         for(OrderItem orderItem : orderItems) {
             order.addOrderItem(orderItem);
         }
-
+        order.makeName();
         orderRepository.save(order);
 
         return order;

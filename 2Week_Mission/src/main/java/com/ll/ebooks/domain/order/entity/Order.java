@@ -32,6 +32,8 @@ public class Order extends BaseEntity {
 
     private LocalDateTime patDate;
 
+    private String name;
+
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus; // 주문 상태 : READY, ORDER, CANCELED, REFUNDED
 
@@ -70,5 +72,16 @@ public class Order extends BaseEntity {
         }
 
         this.orderStatus = OrderStatus.REFUNDED;
+    }
+
+    public void makeName() {
+        String name = orderItems.get(0).getProduct().getSubject();
+
+        if(orderItems.size() > 1) {
+            name += " 외 %d권".formatted(orderItems.size() - 1);
+        }
+
+        this.name = name;
+
     }
 }
