@@ -63,4 +63,12 @@ public class Order extends BaseEntity {
 
         this.orderStatus = OrderStatus.PAID;
     }
+
+    public void setRefundDone() {
+        for(OrderItem orderItem : orderItems) {
+            orderItem.setRefundDone();
+        }
+
+        this.orderStatus = OrderStatus.REFUNDED;
+    }
 }
