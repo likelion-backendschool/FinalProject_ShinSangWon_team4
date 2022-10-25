@@ -18,6 +18,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.ResponseErrorHandler;
@@ -31,6 +32,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
+//TODO 예외 처리를 묶어서 해야할까 ..? 컨트롤러 / 서비스 나눠서 해야할까 ... 아니면 지금처럼 .. ? ?
 @RequiredArgsConstructor
 @RequestMapping("/order")
 @Controller
@@ -62,6 +64,27 @@ public class OrderController {
         model.addAttribute("order", order);
         model.addAttribute("memberRestCash", restCash);
         return "order/detail";
+    }
+
+    @PostMapping("/{id}/payByRestCashOnly")
+    public String restCashOnlyForm(@PathVariable Long id, Principal principal, Model model) {
+        Order order = orderService.findById(id);
+
+        if(order == null) {
+            throw new NoSuchElementException("해당 주문이 존재하지 않습니다.");
+        }
+
+        Member loginMember = memberService.findByUsername(principal.getName())
+                .orElseThrow(() -> new NoSuchElementException("비정상적인 접근입니다."));
+
+        if(!order.getMember().equals(loginMember)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "본인의 주문만 볼 수 있습니다.");
+        }
+
+        orderService.payOnlyRestCash(order);
+
+        return "redirect:/order/%d".formatted(id);
+
     }
 
     // --- 토스페이먼츠 api 연동 시작 ---
