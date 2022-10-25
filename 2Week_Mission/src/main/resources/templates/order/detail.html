@@ -25,7 +25,7 @@
 
             const paymentData = {
                 amount: orderPayPrice,
-                orderId: "order__" + orderId,
+                orderId: "order__" + orderId + "__" + (Math.random() + "").substring(2), // 결제 테스트를 위해 랜덤 값 생성
                 orderName,
                 customerName: buyerName,
                 successUrl: window.location.origin +"/order/" + orderId + "/success",
@@ -56,6 +56,10 @@
 
                 <div>
                     주문가격 : [[${order.getTotalPayPrice}]]
+                </div>
+
+                <div>
+                    주문상태 : [[${order.orderStatus}]]
                 </div>
 
                 <div>

@@ -64,6 +64,7 @@ public class Order extends BaseEntity {
         }
 
         this.orderStatus = OrderStatus.PAID;
+        this.payDate = LocalDateTime.now();
     }
 
     public void setRefundDone() {

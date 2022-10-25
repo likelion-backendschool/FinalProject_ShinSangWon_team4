@@ -78,6 +78,21 @@ public class OrderService {
     }
 
     @Transactional
+    public void payOnlyTossPayments(Order order) {
+
+        Member member = order.getMember(); // 구매자
+
+        int payPrice = order.getTotalPayPrice();
+        //Tosspayments를 예치금 시스템에 편입시키기
+        memberService.addCash(member, payPrice, "주문결제충전_토스페이먼츠");
+        memberService.addCash(member, payPrice * -1, "주문결제_토스페이먼츠");
+
+        order.setPaymentDone();
+        orderRepository.save(order);
+
+    }
+
+    @Transactional
     public void refund(Order order) {
         int payPrice = order.getTotalPayPrice();
         memberService.addCash(order.getMember(), payPrice, "주문환불_예치금환불");
