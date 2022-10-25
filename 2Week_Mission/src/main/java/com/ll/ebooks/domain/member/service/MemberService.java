@@ -126,8 +126,16 @@ public class MemberService {
 
         int newRestCash = member.getRestCash() + cashLog.getPrice();
         member.modifyCash(newRestCash);
+        memberRepository.save(member);
 
         return member.getId();
+    }
+
+    //select문으로 매번 가져와야 하기 때문에 이렇게 해야 함
+    public int getRestCash(Member member) {
+        Member selectedMember = findByUsername(member.getUsername()).get();
+
+        return selectedMember.getRestCash();
     }
 
     //임시 비밀번호 발급

@@ -57,7 +57,10 @@ public class OrderController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "본인의 주문만 볼 수 있습니다.");
         }
 
+        int restCash = memberService.getRestCash(loginMember);
+
         model.addAttribute("order", order);
+        model.addAttribute("memberRestCash", restCash);
         return "order/detail";
     }
 
