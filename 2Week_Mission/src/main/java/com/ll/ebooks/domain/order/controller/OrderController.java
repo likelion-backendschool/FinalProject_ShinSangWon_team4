@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ll.ebooks.domain.member.entity.Member;
 import com.ll.ebooks.domain.member.service.MemberService;
 import com.ll.ebooks.domain.order.entity.Order;
+import com.ll.ebooks.domain.order.entity.OrderStatus;
 import com.ll.ebooks.domain.order.exception.NotEnoughMoneyException;
 import com.ll.ebooks.domain.order.exception.NotMatchedOrderIdException;
 import com.ll.ebooks.domain.order.service.OrderService;
@@ -44,6 +45,76 @@ public class OrderController {
     private final RestTemplate restTemplate = new RestTemplate();
     private final ObjectMapper objectMapper;
 
+
+    @GetMapping("/list")
+    public String showOrderList() {
+
+        return "/order/list";
+    }
+
+    //전체 주문
+    @GetMapping("/create")
+    public String makeAllCartItemOrder(Principal principal) {
+        Member loginMember = memberService.findByUsername(principal.getName())
+                .orElseThrow(() -> new NoSuchElementException("비정상적인 접근입니다."));
+
+        Order order = orderService.createFromCart(loginMember);
+
+        return "redirect:/order/%d".formatted(order.getId());
+    }
+
+    //단일 주문
+    @GetMapping("/create/{id}")
+    public String makeSingleCartItemOrder(@PathVariable Long id, Principal principal) {
+        Member loginMember = memberService.findByUsername(principal.getName())
+                .orElseThrow(() -> new NoSuchElementException("비정상적인 접근입니다."));
+
+        Order order = orderService.createSingleOrder(id, loginMember);
+
+        return "redirect:/order/%d".formatted(order.getId());
+    }
+
+    //주문 취소
+    @GetMapping("/{id}/cancel")
+    public String cancelOrder(@PathVariable Long id, Principal principal) {
+
+        Order order = orderService.findById(id);
+
+        Member loginMember = memberService.findByUsername(principal.getName())
+                .orElseThrow(() -> new NoSuchElementException("비정상적인 접근입니다."));
+
+        if(!order.getMember().equals(loginMember)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "비정상적인 접근입니다.");
+        }
+
+        orderService.cancel(order);
+
+        return "redirect:/order/%d".formatted(order.getId());
+    }
+
+    //주문 환불
+    @GetMapping("{id}/refund")
+    public String refundOrder(@PathVariable Long id, Principal principal) {
+
+        Order order = orderService.findById(id);
+
+        Member loginMember = memberService.findByUsername(principal.getName())
+                .orElseThrow(() -> new NoSuchElementException("비정상적인 접근입니다."));
+
+        if(!order.getMember().equals(loginMember)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "비정상적인 접근입니다.");
+        }
+
+        if(!order.getOrderStatus().equals(OrderStatus.PAID)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "결제가 되지 않은 요청에 대해서는 환불할 수 없습니다.");
+        }
+
+        orderService.refund(order);
+
+        return "redirect:/order/%d".formatted(order.getId());
+    }
+
+
     @GetMapping("/{id}")
     public String showOrderDetail(@PathVariable Long id, Principal principal, Model model) {
 
@@ -61,7 +132,14 @@ public class OrderController {
         }
 
         int restCash = memberService.getRestCash(loginMember);
+        //환불 가능여부(기본 값은 불가능)
+        boolean isRefundable = false;
+        //만약, 결제 된 상태라면 환불 가능 여부 판단
+        if(order.getOrderStatus() == OrderStatus.PAID) {
+            isRefundable = orderService.getRefundPossibility(order);
+        }
 
+        model.addAttribute("isRefundable", isRefundable);
         model.addAttribute("order", order);
         model.addAttribute("memberRestCash", restCash);
         return "order/detail";
@@ -87,6 +165,7 @@ public class OrderController {
         return "redirect:/order/%d".formatted(id);
 
     }
+
 
     // --- 토스페이먼츠 api 연동 시작 ---
 

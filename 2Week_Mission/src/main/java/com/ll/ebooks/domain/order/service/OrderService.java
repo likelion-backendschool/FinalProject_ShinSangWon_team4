@@ -7,12 +7,14 @@ import com.ll.ebooks.domain.member.service.MemberService;
 import com.ll.ebooks.domain.order.entity.Order;
 import com.ll.ebooks.domain.order.entity.OrderItem;
 import com.ll.ebooks.domain.order.exception.NotEnoughMoneyException;
+import com.ll.ebooks.domain.order.exception.RefundTimeOutException;
 import com.ll.ebooks.domain.order.repository.OrderRepository;
 import com.ll.ebooks.domain.product.entity.Product;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,6 +45,19 @@ public class OrderService {
         }
 
         return create(member, orderItems);
+    }
+    @Transactional
+    public Order createSingleOrder(Long id, Member loginMember) {
+        CartItem cartItem = cartItemService.findById(id);
+        List<OrderItem> orderItems = new ArrayList<>();
+        Product product = cartItem.getProduct();
+
+        if(product.isOrderable()) {
+            orderItems.add(new OrderItem(product));
+            cartItemService.removeItem(cartItem);
+        }
+
+        return create(loginMember, orderItems);
     }
 
     @Transactional
@@ -100,6 +115,13 @@ public class OrderService {
 
     @Transactional
     public void refund(Order order) {
+
+        boolean isRefundable = getRefundPossibility(order);
+
+        if(!isRefundable) {
+            throw new RefundTimeOutException();
+        }
+
         int payPrice = order.getTotalPayPrice();
         memberService.addCash(order.getMember(), payPrice, "주문환불_예치금환불");
 
@@ -112,4 +134,24 @@ public class OrderService {
         return orderRepository.findById(id).orElse(null);
     }
 
+
+    @Transactional
+    public void cancel(Order order) {
+        order.setCancel();
+    }
+
+    //환불 가능 여부
+    public boolean getRefundPossibility(Order order) {
+
+        LocalDateTime orderTime = order.getPayDate();
+        LocalDateTime targetTime = orderTime.plusMinutes(10);
+
+        //지금 시각이 주문 시점보다 10분 전이므로, 환불 가능
+        if(LocalDateTime.now().isBefore(targetTime)) {
+            return true;
+        }
+
+        return false;
+
+    }
 }

@@ -19,7 +19,7 @@ import java.security.Principal;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-//TODO 장바구니 삭제 뷰 구현
+//TODO 장바구니 선택해서 삭제, 선택해서 주문 기능 구현
 @RequiredArgsConstructor
 @RequestMapping("/cart")
 @Controller

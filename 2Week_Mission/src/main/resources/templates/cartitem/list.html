@@ -21,9 +21,9 @@
                 </tr>
                 </thead>
                 <tbody>
-                <th:block th:each="cartitem : ${cartItemList}">
+                <th:block th:each="cartitem, index : ${cartItemList}">
                     <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                        <th scope="row" class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white" th:text="${cartitem.id}"></th>
+                        <th scope="row" class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white" th:text="${index.count}"></th>
                         <td class="py-4 px-6">
                             <a th:href="@{|/product/${cartitem.product.id}|}" th:text="${cartitem.product.subject}"></a>
                         </td>
@@ -32,6 +32,10 @@
                         <td class="py-4 px-6" th:text="${#temporals.format(cartitem.createdDate, 'yyyy-MM-dd hh:mm')}"></td>
                         <td class="py-4 px-6" th:text="${#temporals.format(cartitem.modifiedDate, 'yyyy-MM-dd hh:mm')}"></td>
                         <td>
+                            <a onclick="if ( !confirm('정말로 주문하시겠습니까?') ) return false;" th:href="@{|/order/create/${cartitem.id}|}"
+                               class="delete btn btn-sm btn btn-info"
+                               sec:authorize="isAuthenticated()"
+                               th:text="주문"></a>
                             <a onclick="if ( !confirm('정말로 삭제하시겠습니까?') ) return false;" th:href="@{|/cart/remove/${cartitem.id}|}"
                                class="delete btn btn-sm btn btn-warning"
                                sec:authorize="isAuthenticated()"
@@ -43,7 +47,9 @@
             </table>
         </div>
         <br/>
-
+        <div class = "col-6">
+            <a th:href="@{|/order/create|}" class="btn btn-active btn-info">전체 주문하기</a>
+        </div>
     </section>
 
 </main>

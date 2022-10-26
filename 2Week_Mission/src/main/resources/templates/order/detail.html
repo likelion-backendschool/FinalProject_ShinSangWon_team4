@@ -43,7 +43,7 @@
                 </div>
 
                 <div>
-                    주문상태 : [[${order.orderStatus}]]
+                    주문상태 : [[${order.orderStatus.getDescription()}]]
                 </div>
 
                 <div>
@@ -61,21 +61,31 @@
                         예치금 잔액 : [[${memberRestCash}]]
                     </div>
                     <div th:with="maxUseRestCash = ${order.getTotalPayPrice > memberRestCash ? memberRestCash : order.getTotalPayPrice}">
+                        <div th:if="${order.orderStatus.name() == 'READY'}">
                         <span>사용할 예치금 : </span>
                         <input type="number" id="PaymentForm__useRestCash"
                                th:placeholder="|0 ~ ${maxUseRestCash}|"
                                class="input input-bordered min-w-[300px]" min="0" th:max="${maxUseRestCash}"
                                onkeydown="PaymentForm__useRestCashFix();"
                                onkeyup="PaymentForm__useRestCashFix();"
-                        >
+                        <div>
+
                         <label class="inline-flex items-center ml-3">
                             <span>전액사용</span>
                             <input onchange="PaymentForm__useRestCashAllChanged();" id="PaymentForm__useRestCashAll"
                                    type="checkbox" class="ml-2 checkbox">
                         </label>
-                    <br/>
+                        </div>
+                    <br/><br/>
                     <button th:if="${order.orderStatus.name() == 'READY' or order.orderStatus.name() == 'FAILED'}"onclick="payment();" class="btn btn-sm btn-info">카드결제</button>
-                    <span th:if="${order.orderStatus.name() == 'PAID'}">결제완료</span>
+                        <a onclick="if ( !confirm('정말로 취소하시겠습니까?') ) return false;" th:href="@{|/order/${order.id}/cancel|}"
+                           class="delete btn btn-sm btn btn-success" th:if="${order.orderStatus.name() == 'READY'}"
+                           sec:authorize="isAuthenticated()"
+                           th:text="주문취소"></a>
+                        <a onclick="if ( !confirm('정말로 환불하시겠습니까?') ) return false;" th:href="@{|/order/${order.id}/refund|}"
+                           class="delete btn btn-sm btn btn-success" th:if="${order.orderStatus.name() == 'PAID' and isRefundable}"
+                           sec:authorize="isAuthenticated()"
+                           th:text="주문환불"></a>
                 </div>
                 <div>
                     <div>

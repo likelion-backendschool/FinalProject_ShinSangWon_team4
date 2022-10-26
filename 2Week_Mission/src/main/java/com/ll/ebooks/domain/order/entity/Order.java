@@ -75,6 +75,10 @@ public class Order extends BaseEntity {
         this.orderStatus = OrderStatus.REFUNDED;
     }
 
+    public void setCancel() {
+        this.orderStatus = OrderStatus.CANCELED;
+    }
+
     public void makeName() {
         String name = orderItems.get(0).getProduct().getSubject();
 
