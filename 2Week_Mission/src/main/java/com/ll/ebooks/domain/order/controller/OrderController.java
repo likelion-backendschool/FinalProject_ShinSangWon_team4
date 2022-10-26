@@ -47,7 +47,12 @@ public class OrderController {
 
 
     @GetMapping("/list")
-    public String showOrderList() {
+    public String showOrderList(Model model, Principal principal) {
+
+        Member loginMember = memberService.findByUsername(principal.getName())
+                .orElseThrow(() -> new NoSuchElementException("비정상적인 접근입니다."));
+
+        model.addAttribute("orderList", orderService.findAllByMemberId(loginMember.getId()));
 
         return "/order/list";
     }

@@ -145,6 +145,12 @@
                     장바구니
                 </span>
             </a>
+            <a href="/order/list" class="inline-flex" sec:authorize="isAuthenticated()">
+                <i class="fa-solid fa-business-time"></i>
+                <span class="ml-[2px] hidden sm:block">
+                    주문내역
+                </span>
+            </a>
             <a href="/member/modify" class="inline-flex" sec:authorize="isAuthenticated()">
                 <i class="fa-solid fa fa-pencil"></i>
                 <span class="ml-[2px] hidden sm:block">

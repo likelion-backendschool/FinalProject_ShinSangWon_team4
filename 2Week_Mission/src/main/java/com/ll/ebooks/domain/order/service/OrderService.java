@@ -4,6 +4,7 @@ import com.ll.ebooks.domain.cartitem.entity.CartItem;
 import com.ll.ebooks.domain.cartitem.service.CartItemService;
 import com.ll.ebooks.domain.member.entity.Member;
 import com.ll.ebooks.domain.member.service.MemberService;
+import com.ll.ebooks.domain.order.dto.response.OrderListResponseDto;
 import com.ll.ebooks.domain.order.entity.Order;
 import com.ll.ebooks.domain.order.entity.OrderItem;
 import com.ll.ebooks.domain.order.exception.NotEnoughMoneyException;
@@ -17,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -153,5 +155,11 @@ public class OrderService {
 
         return false;
 
+    }
+
+    public List<OrderListResponseDto> findAllByMemberId(Long memberId) {
+        return orderRepository.findAllByMemberIdOrderByIdDesc(memberId).stream()
+                .map(OrderListResponseDto::new)
+                .collect(Collectors.toList());
     }
 }
