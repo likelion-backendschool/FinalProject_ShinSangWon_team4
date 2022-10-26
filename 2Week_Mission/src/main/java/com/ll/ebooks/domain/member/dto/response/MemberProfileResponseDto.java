@@ -11,7 +11,6 @@ public class MemberProfileResponseDto {
     private String nickname;
     private String email;
     private Role role;
-
     private int restCash;
 
     public MemberProfileResponseDto(Member entity) {
