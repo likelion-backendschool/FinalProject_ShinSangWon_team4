@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ll.ebooks.domain.member.entity.Member;
 import com.ll.ebooks.domain.member.service.MemberService;
+import com.ll.ebooks.domain.mybook.service.MyBookService;
 import com.ll.ebooks.domain.order.entity.Order;
 import com.ll.ebooks.domain.order.entity.OrderStatus;
 import com.ll.ebooks.domain.order.exception.NotEnoughMoneyException;
@@ -44,6 +45,7 @@ public class OrderController {
     private final MemberService memberService;
     private final RestTemplate restTemplate = new RestTemplate();
     private final ObjectMapper objectMapper;
+    private final MyBookService myBookService;
 
 
     @GetMapping("/list")
@@ -166,7 +168,8 @@ public class OrderController {
         }
 
         orderService.payOnlyRestCash(order);
-
+        //mybook 등록
+        myBookService.RegisteringBook(loginMember, order);
         return "redirect:/order/%d".formatted(id);
 
     }
@@ -231,7 +234,8 @@ public class OrderController {
 
             //결제 로직 구현
             orderService.payTossPayments(order, restPayCash);
-
+            //mybook 등록
+            myBookService.RegisteringBook(member, order);
             JsonNode successNode = responseEntity.getBody();
             model.addAttribute("orderId", successNode.get("orderId").asText());
             String secret = successNode.get("secret").asText(); // 가상계좌의 경우 입금 callback 검증을 위해서 secret을 저장하기를 권장함
