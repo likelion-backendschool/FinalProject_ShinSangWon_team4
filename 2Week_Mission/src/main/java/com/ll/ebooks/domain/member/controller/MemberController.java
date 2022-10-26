@@ -192,4 +192,13 @@ public class MemberController {
 
         return "redirect:/";
     }
+
+    @GetMapping("/profile")
+    public String showProfile(Model model, Principal principal) {
+
+        Member member = memberService.findByUsername(principal.getName()).orElse(null);
+        model.addAttribute("member", memberService.findById(member.getId()));
+
+        return "member/profile";
+    }
 }

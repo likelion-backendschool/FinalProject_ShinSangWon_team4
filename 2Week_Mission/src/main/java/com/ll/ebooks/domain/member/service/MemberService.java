@@ -7,6 +7,7 @@ import com.ll.ebooks.domain.member.dto.request.MemberInfoModifyRequestDto;
 import com.ll.ebooks.domain.member.dto.request.MemberPasswordModifyRequestDto;
 import com.ll.ebooks.domain.member.dto.request.PasswordFindRequestDto;
 import com.ll.ebooks.domain.member.dto.request.UsernameFindRequestDto;
+import com.ll.ebooks.domain.member.dto.response.MemberProfileResponseDto;
 import com.ll.ebooks.domain.member.entity.Member;
 import com.ll.ebooks.domain.member.entity.Role;
 import com.ll.ebooks.domain.member.repository.MemberRepository;
@@ -17,6 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.Random;
 
@@ -154,5 +156,14 @@ public class MemberService {
                 .toString();
 
         return tempPassword;
+    }
+
+    public MemberProfileResponseDto findById(Long id) {
+
+        Member entity = memberRepository.findById(id)
+                .orElseThrow(() -> (new NoSuchElementException("회원이 존재하지 않습니다."))
+        );
+
+        return new MemberProfileResponseDto(entity);
     }
 }

@@ -127,6 +127,12 @@
                     비밀번호 찾기
                 </span>
             </a>
+            <a href="/member/profile" class="inline-flex" sec:authorize="isAuthenticated()">
+                <i class="fa-solid fa-user"></i>
+                <span class="ml-[2px] hidden sm:block">
+                    프로필
+                </span>
+            </a>
             <a href="/post/list" class="inline-flex" sec:authorize="isAuthenticated()">
                 <i class="fa fa-list-ul" aria-hidden="true"></i>
                 <span class="ml-[2px] hidden sm:block">
