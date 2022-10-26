@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -28,7 +29,7 @@ public class MyBookService {
     }
 
     @Transactional
-    public Long RegisteringBook(Member member, Order order) {
+    public Long registeringBook(Member member, Order order) {
 
         List<OrderItem> orderItemList = order.getOrderItems();
 
@@ -39,6 +40,20 @@ public class MyBookService {
                     .product(product)
                     .build();
             myBookRepository.save(myBook);
+        }
+
+        return order.getId();
+    }
+
+    @Transactional
+    public Long deRegisteringBook(Member member, Order order) {
+
+        List<OrderItem> orderItemList = order.getOrderItems();
+
+        for(OrderItem orderItem : orderItemList) {
+            MyBook myBook = myBookRepository.findByMemberIdAndProductId(member.getId(), orderItem.getProduct().getId())
+                    .orElseThrow(() -> new NoSuchElementException("해당하는 상품이 존재하지 않습니다."));
+            myBookRepository.delete(myBook);
         }
 
         return order.getId();

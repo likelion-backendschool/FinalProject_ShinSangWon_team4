@@ -148,7 +148,7 @@ public class OrderService {
         LocalDateTime orderTime = order.getPayDate();
         LocalDateTime targetTime = orderTime.plusMinutes(10);
 
-        //지금 시각이 주문 시점보다 10분 전이므로, 환불 가능
+        //지금 시각이 주문 시간+10분 전이므로, 환불 가능
         if(LocalDateTime.now().isBefore(targetTime)) {
             return true;
         }

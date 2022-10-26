@@ -117,7 +117,8 @@ public class OrderController {
         }
 
         orderService.refund(order);
-
+        //환불 시 mybook에서 제거됨
+        myBookService.deRegisteringBook(loginMember, order);
         return "redirect:/order/%d".formatted(order.getId());
     }
 
@@ -169,7 +170,7 @@ public class OrderController {
 
         orderService.payOnlyRestCash(order);
         //mybook 등록
-        myBookService.RegisteringBook(loginMember, order);
+        myBookService.registeringBook(loginMember, order);
         return "redirect:/order/%d".formatted(id);
 
     }
@@ -235,7 +236,7 @@ public class OrderController {
             //결제 로직 구현
             orderService.payTossPayments(order, restPayCash);
             //mybook 등록
-            myBookService.RegisteringBook(member, order);
+            myBookService.registeringBook(member, order);
             JsonNode successNode = responseEntity.getBody();
             model.addAttribute("orderId", successNode.get("orderId").asText());
             String secret = successNode.get("secret").asText(); // 가상계좌의 경우 입금 callback 검증을 위해서 secret을 저장하기를 권장함
