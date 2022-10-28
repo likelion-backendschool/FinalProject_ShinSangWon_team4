@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html layout:decorate="~{/layout/layout}">
+
+<head>
+    <title>메인 페이지</title>
+</head>
+
+<body>
+<main layout:fragment="main">
+    <section class="section container mx-auto px-4">
+        <br/>
+        <h1 class="font-bold text-lg">메인 페이지</h1>
+        <br/>
+        <div class="overflow-x-auto relative">
+            <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                <thead class="text-xs text-gray-700 uppercase bg-blue-50 dark:bg-gray-700 dark:text-gray-400">
+                <tr>
+                    <th scope="col" class="py-3 px-6">번호</th>
+                    <th scope="col" class="py-3 px-6">제목</th>
+                    <th scope="col" class="py-3 px-6">작성자</th>
+                    <th scope="col" class="py-3 px-6">작성날짜</th>
+                    <th scope="col" class="py-3 px-6">수정날짜</th>
+                </tr>
+                </thead>
+                <tbody>
+                <th:block th:each="post : ${postList}">
+                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                        <th scope="row" class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white" th:text="${post.id}"></th>
+                        <td class="py-4 px-6">
+                            <a th:href="@{|/post/${post.id}|}" th:text="${post.subject}"></a>
+                        </td>
+                        <td class="py-4 px-6" th:text="${post.member.username}"></td>
+                        <td class="py-4 px-6" th:text="${#temporals.format(post.createdDate, 'yyyy-MM-dd hh:mm')}"></td>
+                        <td class="py-4 px-6" th:text="${#temporals.format(post.modifiedDate, 'yyyy-MM-dd hh:mm')}"></td>
+                    </tr>
+                </th:block>
+                </tbody>
+            </table>
+        </div>
+        <br/>
+        <div class = "col-6">
+            <a th:href="@{|/post/write|}" class="btn btn-active btn-info">글 작성하기</a>
+        </div>
+    </section>
+
+</main>
+</body>
+
+</html>

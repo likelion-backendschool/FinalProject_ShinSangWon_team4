@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html layout:decorate="~{layout/layout.html}">
+
+<head>
+    <style>
+        .fieldError { color:red; font-size:12px;}
+    </style>
+    <title>회원가입</title>
+</head>
+
+<body>
+
+<main layout:fragment="main">
+    <section class="section section-join flex-grow flex flex-col items-center justify-center">
+
+        <div class="max-w-md w-full px-2 pt-4">
+            <h1 class="font-bold text-lg">회원가입</h1>
+            <form th:action method="POST" class="flex flex-col gap-3"
+                  th:object="${joinRequestDto}">
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text">아이디</span>
+                    </label>
+                    <input autofocus type="text" name="username" placeholder="아이디" class="input input-bordered"
+                           maxlength="16" th:field="*{username}">
+                </div>
+                <p th:if="${#fields.hasErrors('username')}" th:errors="*{username}" class="fieldError"></p>
+
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text">비밀번호</span>
+                    </label>
+                    <input type="password" name="password"
+                           placeholder="비밀번호" class="input input-bordered" maxlength="16">
+                </div>
+                <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="fieldError"></p>
+
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text">비밀번호 확인</span>
+                    </label>
+                    <input type="password" name="passwordCheck"
+                           placeholder="비밀번호 확인" class="input input-bordered" maxlength="16">
+                </div>
+
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text">이메일</span>
+                    </label>
+                    <input type="email" name="email" placeholder="이메일" class="input input-bordered" maxlength="50" th:field="*{email}">
+                </div>
+                <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="fieldError"></p>
+
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text">닉네임(선택)</span>
+                    </label>
+                    <input type="text" name="nickname" placeholder="작가로 활동하시려면 기입해주세요" class="input input-bordered" maxlength="8" th:field="*{nickname}">
+                </div>
+                <p th:if="${#fields.hasErrors('nickname')}" th:errors="*{nickname}" class="fieldError"></p>
+
+                <div class="grid grid-cols-2 mt-2 gap-2">
+                    <input class="btn btn-primary" type="submit" value="회원가입">
+                    <a href="/member/login" class="btn btn-secondary btn-outline">로그인</a>
+                </div>
+            </form>
+        </div>
+
+        </div>
+    </section>
+
+</main>
+</body>
+</html>
