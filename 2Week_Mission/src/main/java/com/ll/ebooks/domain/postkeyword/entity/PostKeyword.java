@@ -20,6 +20,7 @@ public class PostKeyword extends BaseEntity {
 
     private String content;
 
+    @Builder.Default
     @Transient
     private Map<String, Object> extra = new LinkedHashMap<>();
     public long getExtra_postTagsCount() {
