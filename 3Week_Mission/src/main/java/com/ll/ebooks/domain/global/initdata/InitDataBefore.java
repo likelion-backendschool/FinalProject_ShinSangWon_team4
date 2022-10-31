@@ -3,6 +3,8 @@ package com.ll.ebooks.domain.global.initdata;
 import com.ll.ebooks.domain.cartitem.service.CartItemService;
 import com.ll.ebooks.domain.member.dto.request.JoinRequestDto;
 import com.ll.ebooks.domain.member.entity.Member;
+import com.ll.ebooks.domain.member.entity.Role;
+import com.ll.ebooks.domain.member.repository.MemberRepository;
 import com.ll.ebooks.domain.member.service.MemberService;
 import com.ll.ebooks.domain.order.entity.Order;
 import com.ll.ebooks.domain.order.repository.OrderRepository;
@@ -14,15 +16,17 @@ import com.ll.ebooks.domain.product.dto.request.ProductCreateRequestDto;
 import com.ll.ebooks.domain.product.entity.Product;
 import com.ll.ebooks.domain.product.repository.ProductRepository;
 import com.ll.ebooks.domain.product.service.ProductService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Arrays;
 import java.util.List;
 
 public interface InitDataBefore {
-    default void tearUp(MemberService memberService, PostService postService,
-                        ProductService productService, ProductRepository productRepository,
-                        PostKeywordService postKeywordService, CartItemService cartItemService,
-                        OrderService orderService, OrderRepository orderRepository) {
+    default void tearUp(MemberService memberService, MemberRepository memberRepository,
+                        PostService postService, ProductService productService,
+                        ProductRepository productRepository, PostKeywordService postKeywordService,
+                        CartItemService cartItemService, OrderService orderService,
+                        OrderRepository orderRepository, PasswordEncoder passwordEncoder) {
         class Helper {
             public Order order(Member member, List<Product> products) {
                 for (int i = 0; i < products.size(); i++) {
@@ -50,9 +54,18 @@ public interface InitDataBefore {
                 .email("test@naver.com")
                 .nickname("")
                 .build());
-
         Member member1 = memberService.findByUsername("dnjsml30").orElseThrow();
         Member member2 = memberService.findByUsername("test123").orElseThrow();
+        //관리자 회원 생성
+        Member member3 = Member.builder()
+                .username("admin")
+                .password(passwordEncoder.encode("admin123"))
+                .email("admin@mutbooks.com")
+                .nickname("관리자")
+                .role(Role.ADMIN)
+                .build();
+        memberRepository.save(member3);
+
 
         //예치금 충전
         memberService.addCash(member1, 100_000, "무통장입금");
