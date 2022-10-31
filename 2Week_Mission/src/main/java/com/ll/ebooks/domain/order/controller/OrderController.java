@@ -59,7 +59,7 @@ public class OrderController {
         return "/order/list";
     }
 
-    //전체 주문
+    //장바구니 전체 주문
     @GetMapping("/create")
     public String makeAllCartItemOrder(Principal principal) {
         Member loginMember = memberService.findByUsername(principal.getName())
@@ -70,7 +70,7 @@ public class OrderController {
         return "redirect:/order/%d".formatted(order.getId());
     }
 
-    //단일 주문
+    //장바구니 단일 주문
     @GetMapping("/create/{id}")
     public String makeSingleCartItemOrder(@PathVariable Long id, Principal principal) {
         Member loginMember = memberService.findByUsername(principal.getName())
