@@ -23,7 +23,7 @@ import javax.validation.Valid;
 import java.security.Principal;
 import java.util.Optional;
 
-// TODO : 에러메세지 성공메세지 띄우기 !!! (기능 구현 먼저 하고 . . .), 전체적인 코드 리팩토링, 닉네임에 null값 입력받기
+// TODO : 회원 프로필에서 예치금 충전 가능하게 하기, 에러 메세지 처리
 @RequiredArgsConstructor
 @RequestMapping("/member")
 @Controller
@@ -191,5 +191,14 @@ public class MemberController {
 
 
         return "redirect:/";
+    }
+
+    @GetMapping("/profile")
+    public String showProfile(Model model, Principal principal) {
+
+        Member member = memberService.findByUsername(principal.getName()).orElse(null);
+        model.addAttribute("member", memberService.findById(member.getId()));
+
+        return "member/profile";
     }
 }

@@ -50,6 +50,9 @@
 
                 <div>
                     <a th:href="@{|/product/list|}" class="btn btn-sm btn-info">도서 목록</a>
+                    <a th:href="@{|/cart/add/${product.id}|}" class="btn btn-sm btn-success"
+                       sec:authorize="isAuthenticated()"
+                       th:if="${product.member != null and #authentication.getPrincipal().getUsername() != product.member.username}">장바구니</a>
                     <a th:href="@{|/product/${product.id}/modify|}" class="btn btn-sm btn-info"
                        sec:authorize="isAuthenticated()"
                        th:if="${product.member != null and #authentication.getPrincipal().getUsername() == product.member.username}">수정</a>
