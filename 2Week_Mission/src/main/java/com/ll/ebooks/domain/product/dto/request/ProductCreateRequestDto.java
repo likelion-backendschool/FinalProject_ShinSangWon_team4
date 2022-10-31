@@ -3,6 +3,7 @@ package com.ll.ebooks.domain.product.dto.request;
 import com.ll.ebooks.domain.member.entity.Member;
 import com.ll.ebooks.domain.postkeyword.entity.PostKeyword;
 import com.ll.ebooks.domain.product.entity.Product;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -28,6 +29,7 @@ public class ProductCreateRequestDto {
     private Long postKeywordId;
     private PostKeyword postKeyword;
 
+    @Builder
     public ProductCreateRequestDto(String subject, int price) {
         this.subject = subject;
         this.price = price;

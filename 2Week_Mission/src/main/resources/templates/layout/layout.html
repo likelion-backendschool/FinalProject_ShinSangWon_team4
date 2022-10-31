@@ -127,16 +127,40 @@
                     비밀번호 찾기
                 </span>
             </a>
+            <a href="/member/profile" class="inline-flex" sec:authorize="isAuthenticated()">
+                <i class="fa-solid fa-user"></i>
+                <span class="ml-[2px] hidden sm:block">
+                    프로필
+                </span>
+            </a>
             <a href="/post/list" class="inline-flex" sec:authorize="isAuthenticated()">
                 <i class="fa fa-list-ul" aria-hidden="true"></i>
                 <span class="ml-[2px] hidden sm:block">
                     내 글 목록
                 </span>
             </a>
-            <a href="/product/list" class="inline-flex" sec:authorize="hasAnyAuthority('WRITER')">
+            <a href="/product/list" class="inline-flex" sec:authorize="isAuthenticated()">
                 <i class="fa-solid fa fa-pencil"></i>
                 <span class="ml-[2px] hidden sm:block">
                     상품 목록
+                </span>
+            </a>
+            <a href="/cart/list" class="inline-flex" sec:authorize="isAuthenticated()">
+                <i class="fa-solid fa-cart-shopping"></i>
+                <span class="ml-[2px] hidden sm:block">
+                    장바구니
+                </span>
+            </a>
+            <a href="/order/list" class="inline-flex" sec:authorize="isAuthenticated()">
+                <i class="fa-solid fa-business-time"></i>
+                <span class="ml-[2px] hidden sm:block">
+                    주문내역
+                </span>
+            </a>
+            <a href="/myBook/list" class="inline-flex" sec:authorize="isAuthenticated()">
+                <i class="fa-solid fa-book"></i>
+                <span class="ml-[2px] hidden sm:block">
+                    구매한 도서
                 </span>
             </a>
             <a href="/member/modify" class="inline-flex" sec:authorize="isAuthenticated()">
