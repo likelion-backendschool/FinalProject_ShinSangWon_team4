@@ -97,6 +97,13 @@
                 </span>
             </a>
 
+            <a href="/adm/rebate/makeData" class="inline-flex" sec:authorize="hasAuthority('ADMIN')">
+                <i class="fa-regular fa-money-bill"></i>
+                <span class="ml-[2px] hidden sm:block">
+                    정산
+                </span>
+            </a>
+
             <a href="/member/login" class="inline-flex" sec:authorize="isAnonymous()">
                 <i class="fa-solid fa-arrow-right-to-bracket"></i>
                 <span class="ml-[2px] hidden sm:block">
