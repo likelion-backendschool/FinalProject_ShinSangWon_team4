@@ -9,6 +9,7 @@ import com.ll.ebooks.domain.order.entity.Order;
 import com.ll.ebooks.domain.order.entity.OrderItem;
 import com.ll.ebooks.domain.order.exception.NotEnoughMoneyException;
 import com.ll.ebooks.domain.order.exception.RefundTimeOutException;
+import com.ll.ebooks.domain.order.repository.OrderItemRepository;
 import com.ll.ebooks.domain.order.repository.OrderRepository;
 import com.ll.ebooks.domain.product.entity.Product;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +29,7 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final CartItemService cartItemService;
     private final MemberService memberService;
-
+    private final OrderItemRepository orderItemRepository;
     @Transactional
     public Order createFromCart(Member member) {
 
@@ -161,5 +162,9 @@ public class OrderService {
         return orderRepository.findAllByMemberIdOrderByIdDesc(memberId).stream()
                 .map(OrderListResponseDto::new)
                 .collect(Collectors.toList());
+    }
+
+    public List<OrderItem> findAllByPayDateBetween(LocalDateTime fromDate, LocalDateTime toDate) {
+        return orderItemRepository.findAllByPayDateBetween(fromDate, toDate);
     }
 }

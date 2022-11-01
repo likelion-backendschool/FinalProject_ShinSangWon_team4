@@ -11,8 +11,8 @@
     <div class="container mx-auto flex-grow flex items-center justify-center">
         <div>
         <h1>정산 데이터 생성</h1>
-        <form>
-            <select class="select select-bordered">
+        <form method="POST" th:action>
+            <select name="yearMonth" class="select select-bordered">
                 <option value="2022-11">2022-11</option>
                 <option value="2022-10">2022-10</option>
             </select>
