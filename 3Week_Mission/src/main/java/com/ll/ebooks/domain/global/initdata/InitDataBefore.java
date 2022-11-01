@@ -95,12 +95,12 @@ public interface InitDataBefore {
         productRepository.save(productCreateRequestDto2.toEntity(member2));
 
         ProductCreateRequestDto productCreateRequestDto3 = new ProductCreateRequestDto("스프링의 정석", 700000);
-        productCreateRequestDto2.setPostKeyword(postKeywordService.findById(2L).orElseThrow());
+        productCreateRequestDto3.setPostKeyword(postKeywordService.findById(2L).orElseThrow());
 
         productRepository.save(productCreateRequestDto3.toEntity(member2));
 
         ProductCreateRequestDto productCreateRequestDto4 = new ProductCreateRequestDto("자바스크립트의 정석", 30000);
-        productCreateRequestDto2.setPostKeyword(postKeywordService.findById(2L).orElseThrow());
+        productCreateRequestDto4.setPostKeyword(postKeywordService.findById(2L).orElseThrow());
 
         productRepository.save(productCreateRequestDto4.toEntity(member2));
 
