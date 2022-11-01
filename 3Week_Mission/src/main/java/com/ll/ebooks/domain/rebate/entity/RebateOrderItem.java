@@ -1,6 +1,8 @@
 package com.ll.ebooks.domain.rebate.entity;
 
+import com.ll.ebooks.domain.cash.entity.CashLog;
 import com.ll.ebooks.domain.global.entity.BaseEntity;
+import com.ll.ebooks.domain.member.entity.Member;
 import com.ll.ebooks.domain.order.entity.Order;
 import com.ll.ebooks.domain.order.entity.OrderItem;
 import com.ll.ebooks.domain.product.entity.Product;
@@ -22,7 +24,7 @@ import java.time.LocalDateTime;
 @Entity
 public class RebateOrderItem extends BaseEntity {
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private OrderItem orderItem;
 
@@ -44,6 +46,17 @@ public class RebateOrderItem extends BaseEntity {
     private boolean isPaid;
     private LocalDateTime payDate;
 
+    // 구매자
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
+    private Member buyer;
+    private String buyerName;
+
+    // 정산 여부
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
+    private CashLog rebateCashLog;
+
     @Builder
     public RebateOrderItem(OrderItem orderItem) {
         this.orderItem = orderItem;
@@ -58,6 +71,10 @@ public class RebateOrderItem extends BaseEntity {
         refundPrice = orderItem.getRefundPrice();
         isPaid = orderItem.isPaid();
         payDate = orderItem.getPayDate();
+
+        //추가 정보
+        buyer = order.getMember();
+        buyerName = order.getMember().getUsername();
     }
 
 }
