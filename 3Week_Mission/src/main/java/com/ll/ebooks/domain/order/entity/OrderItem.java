@@ -22,7 +22,6 @@ public class OrderItem extends BaseEntity {
     private Product product;
 
     private LocalDateTime payDate;
-
     private int price;
     private int salePrice;
     private int wholesalePrice;
