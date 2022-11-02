@@ -10,8 +10,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
+import java.util.Arrays;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -32,16 +33,12 @@ public class RebateController {
     public String makeRebateData(String yearMonth) {
 
         rebateService.makeData(yearMonth);
-        return "redirect:/adm/rebate/rebateOrderItemList";
+        return "redirect:/adm/rebate/rebateOrderItemList?yearMonth=%s".formatted(yearMonth);
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/rebateOrderItemList")
     public String showRebateOrderItemList(String yearMonth, Model model) {
-
-        if(yearMonth == null) {
-            yearMonth = "2022-11";
-        }
 
         List<RebateOrderItem> rebateOrderItemList = rebateService.findRebateOrderItemsByPayDateIn(yearMonth);
         model.addAttribute("rebateOrderItemList", rebateOrderItemList);
@@ -49,12 +46,29 @@ public class RebateController {
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    @ResponseBody
     @PostMapping("/rebateOne/{orderItemId}")
-    public String rebateOne(@PathVariable Long orderItemId) {
-
+    public String rebateOne(@PathVariable Long orderItemId, HttpServletRequest req) {
+        String referer = req.getHeader("Referer");
+        String url[] = referer.split("yearMonth=");
+        String yearMonth = url[1];
         rebateService.rebate(orderItemId);
 
-        return "성공 !!";
+        return "redirect:/adm/rebate/rebateOrderItemList?yearMonth=%s".formatted(yearMonth);
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @PostMapping("/rebate")
+    public String rebate(String ids, HttpServletRequest req) {
+
+        String[] idsArr = ids.split(",");
+
+        Arrays.stream(idsArr)
+                .mapToLong(Long::parseLong)
+                .forEach(rebateService::rebate);
+
+        String referer = req.getHeader("Referer");
+        String url[] = referer.split("yearMonth=");
+        String yearMonth = url[1];
+        return "redirect:/adm/rebate/rebateOrderItemList?yearMonth=%s".formatted(yearMonth);
     }
 }
