@@ -79,14 +79,14 @@ public class RebateService {
         if(!rebateOrderItem.isRebateAvailable()) {
             throw new RuntimeException("정산을 할 수 없습니다");
         }
-
+        //정산 금액
         int calculateRebatePrice = rebateOrderItem.calculateRebatePrice();
-
+        //정산 후 CashLog id 받아오기
         Long cashLogId = memberService.addCash(rebateOrderItem.getProduct().getMember(), calculateRebatePrice, "정산_%d_지급_예치금".formatted(rebateOrderItem.getId()));
 
         CashLog cashLog = cashService.findById(cashLogId);
-
-        rebateOrderItem.setRebateDone(cashLog);
+        //CashLog 찾아서, rebateOrderItem에 넣어주기기
+       rebateOrderItem.setRebateDone(cashLog);
 
         return rebateOrderItem.getId();
     }
