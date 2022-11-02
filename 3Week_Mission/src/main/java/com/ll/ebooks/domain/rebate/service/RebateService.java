@@ -55,4 +55,13 @@ public class RebateService {
 
         rebateOrderItemRepository.save(rebateOrderItem);
     }
+
+    public List<RebateOrderItem> findRebateOrderItemsByPayDateIn(String yearMonth) {
+        String fromDateStr = yearMonth + "-01 00:00:00.000000";
+        String toDateStr = dateService.getEndDayOfMonth(yearMonth) + " 23:59:59.999999";
+        LocalDateTime fromDate = dateService.mapToLocalDateTime(fromDateStr);
+        LocalDateTime toDate = dateService.mapToLocalDateTime(toDateStr);
+
+        return rebateOrderItemRepository.findAllByPayDateBetweenOrderByIdAsc(fromDate, toDate);
+    }
 }

@@ -52,6 +52,12 @@ public class RebateOrderItem extends BaseEntity {
     private Member buyer;
     private String buyerName;
 
+    //판매자
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
+    private Member seller;
+    private String sellerName;
+
     // 정산 여부
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
@@ -75,6 +81,25 @@ public class RebateOrderItem extends BaseEntity {
         //추가 정보
         buyer = order.getMember();
         buyerName = order.getMember().getUsername();
+
+        seller = orderItem.getProduct().getMember();
+        sellerName = orderItem.getProduct().getMember().getNickname();
     }
 
+    public int calculateRebatePrice() {
+
+        if(isRebateAvailable() == false) {
+            return 0;
+        }
+
+        return wholesalePrice - pgFee;
+    }
+
+    public boolean isRebateAvailable() {
+        if(refundPrice > 0) {
+            return false;
+        }
+
+        return true;
+    }
 }
