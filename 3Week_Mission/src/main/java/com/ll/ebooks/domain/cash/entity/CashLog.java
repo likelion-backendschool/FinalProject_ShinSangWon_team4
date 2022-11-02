@@ -28,4 +28,6 @@ public class CashLog extends BaseEntity {
         this.price = price;
         this.eventType = eventType;
     }
+
+
 }

@@ -130,7 +130,7 @@ public class MemberService {
         member.modifyCash(newRestCash);
         memberRepository.save(member);
 
-        return member.getId();
+        return cashLog.getId();
     }
 
     //select문으로 매번 가져와야 하기 때문에 이렇게 해야 함
