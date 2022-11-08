@@ -81,7 +81,7 @@ public class ProductController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "로그인 후 이용해주세요");
         }
 
-        model.addAttribute("productList", productService.findAllByMemberId(optionalMember.get().getId()));
+        model.addAttribute("productList", productService.findAll());
         return "product/list";
 
     }

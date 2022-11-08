@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html layout:decorate="~{layout/layout.html}">
+
+<head>
+    <style>
+        .fieldError { color:red; font-size:12px;}
+    </style>
+    <title>프로필</title>
+</head>
+
+<body>
+
+<main layout:fragment="main">
+    <section class="section section-join flex-grow flex flex-col items-center justify-center">
+
+        <div class="max-w-md w-full px-2 pt-4">
+            <h1 class="font-bold text-lg">회원정보수정</h1>
+            <form th:action method="POST" class="flex flex-col gap-3"
+                  th:object="${member}">
+
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text">아이디</span>
+                    </label>
+                    <input type="test" id="username" name="email"  class="input input-bordered" maxlength="50" th:value="${member.username}" disabled>
+                </div>
+
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text">닉네임(선택)</span>
+                    </label>
+                    <input type="text" id="nickname" name="nickname" class="input input-bordered" maxlength="8" th:value="${member?.nickname}" disabled>
+                </div>
+
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text">이메일</span>
+                    </label>
+                    <input type="text" id="email" name="email" class="input input-bordered" maxlength="50" th:value="${member.email}" disabled>
+                </div>
+
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text">권한</span>
+                    </label>
+                    <input type="text" id="role" name="role" class="input input-bordered" maxlength="50" th:value="${member.role.getDescription()}" disabled>
+                </div>
+
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text">예치금</span>
+                    </label>
+                    <input type="text" id="restcash" name="restcash" class="input input-bordered" maxlength="50" th:value="${member.restCash}" disabled>
+                </div>
+
+            </form>
+        </div>
+
+        </div>
+    </section>
+
+</main>
+</body>
+</html>

@@ -1,10 +1,13 @@
 package com.ll.ebooks.domain.member.service;
 
+import com.ll.ebooks.domain.cash.entity.CashLog;
+import com.ll.ebooks.domain.cash.service.CashService;
 import com.ll.ebooks.domain.member.dto.request.JoinRequestDto;
 import com.ll.ebooks.domain.member.dto.request.MemberInfoModifyRequestDto;
 import com.ll.ebooks.domain.member.dto.request.MemberPasswordModifyRequestDto;
 import com.ll.ebooks.domain.member.dto.request.PasswordFindRequestDto;
 import com.ll.ebooks.domain.member.dto.request.UsernameFindRequestDto;
+import com.ll.ebooks.domain.member.dto.response.MemberProfileResponseDto;
 import com.ll.ebooks.domain.member.entity.Member;
 import com.ll.ebooks.domain.member.entity.Role;
 import com.ll.ebooks.domain.member.repository.MemberRepository;
@@ -15,6 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.Random;
 
@@ -26,6 +30,8 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
     private final JavaMailSender javaMailSender;
+
+    private final CashService cashService;
 
     public Optional<Member> findByUsername(String username) {
         return memberRepository.findByUsername(username);
@@ -116,6 +122,24 @@ public class MemberService {
         return member.getId();
     }
 
+    @Transactional
+    public Long addCash(Member member, int price, String eventType) {
+        CashLog cashLog = cashService.addCash(member, price, eventType);
+
+        int newRestCash = member.getRestCash() + cashLog.getPrice();
+        member.modifyCash(newRestCash);
+        memberRepository.save(member);
+
+        return cashLog.getId();
+    }
+
+    //select문으로 매번 가져와야 하기 때문에 이렇게 해야 함
+    public int getRestCash(Member member) {
+        Member selectedMember = findByUsername(member.getUsername()).get();
+
+        return selectedMember.getRestCash();
+    }
+
     //임시 비밀번호 발급
     public String getTempPassword() {
         // 숫자 0
@@ -132,5 +156,14 @@ public class MemberService {
                 .toString();
 
         return tempPassword;
+    }
+
+    public MemberProfileResponseDto findById(Long id) {
+
+        Member entity = memberRepository.findById(id)
+                .orElseThrow(() -> (new NoSuchElementException("회원이 존재하지 않습니다."))
+        );
+
+        return new MemberProfileResponseDto(entity);
     }
 }

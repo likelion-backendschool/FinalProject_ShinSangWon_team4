@@ -38,4 +38,16 @@ public class Product extends BaseEntity {
         this.subject = subject;
         this.price = price;
     }
+
+    public int getSalePrice() {
+        return getPrice();
+    }
+
+    public int getWholesalePrice() {
+        return (int) Math.ceil(getPrice() * 0.5);
+    }
+
+    public boolean isOrderable() {
+        return true;
+    }
 }
